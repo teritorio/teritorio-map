@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>Highlight & Popup</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id='map'></div>
+    <script>
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'https://vecto.teritorio.xyz/styles/teritorio-0.9.0/style.json',
+            center: [-1.48368, 43.49452],
+            zoom: 14
+        });
+
+        var hoveredStateId = null;
+        var clickStateId = null;
+
+        map.on('load', function() {
+
+            function poi_mousemove(e) {
+                if (e.features.length > 0) {
+                    if (hoveredStateId) {
+                        map.setFeatureState({
+                            source: 'openmaptiles',
+                            'sourceLayer': 'poi',
+                            id: hoveredStateId
+                        }, {
+                            hover: false
+                        });
+                    }
+                    hoveredStateId = e.features[0].id;
+                    map.setFeatureState({
+                        source: 'openmaptiles',
+                        'sourceLayer': 'poi',
+                        id: hoveredStateId
+                    }, {
+                        hover: true
+                    });
+                }
+            }
+
+            // When the mouse leaves the state-fill layer, update the feature state of the
+            // previously hovered feature.
+            function poi_mouseleave() {
+                if (hoveredStateId) {
+                    map.setFeatureState({
+                        source: 'openmaptiles',
+                        'sourceLayer': 'poi',
+                        id: hoveredStateId
+                    }, {
+                        hover: false
+                    });
+                }
+                hoveredStateId = null;
+            }
+
+            function poi_click(e) {
+                if (e.features.length > 0) {
+                    if (clickStateId) {
+                        map.setFeatureState({
+                            source: 'openmaptiles',
+                            'sourceLayer': 'poi',
+                            id: clickStateId
+                        }, {
+                            click: false
+                        });
+                    }
+                    clickStateId = e.features[0].id;
+                    map.setFeatureState({
+                        source: 'openmaptiles',
+                        'sourceLayer': 'poi',
+                        id: clickStateId
+                    }, {
+                        click: true
+                    });
+                }
+            }
+
+            // Create a popup, but don't add it to the map yet.
+            var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            function poi_mouseenter(e) {
+                map.getCanvas().style.cursor = 'pointer';
+
+                var coordinates = e.features[0].geometry.coordinates.slice();
+                var name = e.features[0].properties.name;
+                var class_ = e.features[0].properties.class;
+                var subclass = e.features[0].properties.subclass;
+                var id = e.features[0].properties.id;
+
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                popup.setLngLat(coordinates)
+                    .setHTML(name + "<br/>" + class_ + "<br/>" + subclass + "<br/>" + id)
+                    .addTo(map);
+            }
+
+            function poi_mouseleave() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            }
+
+            ['airport-label-major', 'poi-railway', 'poi-level-1', 'poi-level-2', 'poi-level-3'].forEach(function(layer) {
+                map.setPaintProperty(layer, 'text-color', [
+                    "case", ["boolean", ["feature-state", "click"], false], '#f00', ["boolean", ["feature-state", "hover"], false], '#700',
+                    '#777'
+                ]);
+
+                map.on("mousemove", layer, poi_mousemove);
+                map.on("mouseleave", layer, poi_mouseleave);
+                map.on("click", layer, poi_click);
+
+                map.on('mouseenter', layer, poi_mouseenter);
+                map.on('mouseleave', layer, poi_mouseleave);
+            });
+        });
+    </script>
+</body>
+
+</html>
