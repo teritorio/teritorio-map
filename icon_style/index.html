@@ -146,6 +146,15 @@
                 map.setPaintProperty('poi-level-2-icon', 'text-color', text_color);
                 map.setPaintProperty('poi-level-3', 'text-color', text_color);
                 map.setPaintProperty('poi-level-3-icon', 'text-color', text_color);
+
+                const beforeLayer = style == 'icon' ? 'park-reserve-name-small': 'road_oneway';
+	            map.moveLayer('poi-level-3-icon', beforeLayer);
+	            map.moveLayer('poi-level-3', beforeLayer);
+	            map.moveLayer('poi-level-2-icon', beforeLayer);
+	            map.moveLayer('poi-level-2', beforeLayer);
+	            map.moveLayer('poi-level-1-icon', beforeLayer);
+	            map.moveLayer('poi-level-1', beforeLayer);
+                console.log(map.getStyle().layers);
             }
 
             document.getElementById('buttons').addEventListener('click', function(event) {
