@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Change a map's icon style</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <script src="../../dist/teritorio.umd.production.min.js"></script>
+
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="map"></div>
+
+    <ul class="top-buttons">
+      <li><button data-style="icon">Icon</button></li>
+      <li><button data-style="picto">Picto</button></li>
+    </ul>
+
+    <script type="text/javascript">
+      const map = new mapboxgl.Map({
+        container: document.querySelector('.map'),
+        style:
+          'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        center: [-1.442833, 43.653279],
+        zoom: 15.32,
+        maxZoom: 20,
+        hash: true,
+      });
+
+      map.on('load', function() {
+        const icon = teritorio.icon(map);
+
+        document
+          .querySelector('.top-buttons')
+          .addEventListener('click', function(event) {
+            event.stopPropagation();
+
+            if (event.target.dataset.style) {
+              icon.setStyle(event.target.dataset.style);
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

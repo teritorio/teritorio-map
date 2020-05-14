@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Change a map's language</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <script src="https://cdn.klokantech.com/openmaptiles-language/v1.0/openmaptiles-language.js"></script>
+
+    <script src="../../dist/teritorio.umd.production.min.js"></script>
+
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="map"></div>
+
+    <ul class="top-buttons">
+      <li><button data-lang="latin">Default</button></li>
+      <li><button data-lang="fr">French</button></li>
+      <li><button data-lang="eu">Euskara</button></li>
+      <li><button data-lang="es">Spanish</button></li>
+    </ul>
+
+    <script type="text/javascript">
+      const map = new mapboxgl.Map({
+        container: document.querySelector('.map'),
+        style:
+          'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        center: [-1.222, 43.184],
+        zoom: 10,
+      });
+
+      const language = teritorio.language(map);
+
+      document
+        .querySelector('.top-buttons')
+        .addEventListener('click', function(event) {
+          event.stopPropagation();
+
+          if (event.target.dataset.lang) {
+            language.setLanguage(event.target.dataset.lang);
+          }
+        });
+    </script>
+  </body>
+</html>
