@@ -16,20 +16,11 @@ Collection of helper functions to add some features to Mapbox GL JS.
 
 The project is bundled in several formats so you can use it everywhere.
 
-### ES Module
+If you don't know what format is better for you, choose UMD ;)
 
-```html
-<script type="module">
-  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.1.0/dist/teritorio-map.esm.js';
+### UMD (Universal Module Definition)
 
-  icon(/* ... */);
-  language(/* ... */);
-</script>
-```
-
-### UMD
-
-Older format to use in your HTML files:
+To use in your HTML files:
 
 ```html
 <script
@@ -45,10 +36,21 @@ Older format to use in your HTML files:
 
 ### CommonJS
 
-To import the library in your own project:
+To import the library in your bundled project:
 
 ```js
 import { icon, language } from '@teritorio/map';
+```
+
+### ES Module
+
+```html
+<script type="module">
+  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.1.0/dist/teritorio-map.esm.js';
+
+  icon(/* ... */);
+  language(/* ... */);
+</script>
 ```
 
 ## Requirements
