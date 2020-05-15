@@ -17,7 +17,7 @@
     "build": "tsdx build --format cjs,esm,umd --name teritorio",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build --format cjs,esm,umd --name teritorio"
   },
   "dependencies": {},
   "devDependencies": {
