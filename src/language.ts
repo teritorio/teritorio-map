@@ -6,7 +6,7 @@ interface Options {
 }
 
 /**
- * Handle the map display language, either by auto-detection of the browser language
+ * Select and switch the map display language, either by auto-detection of the browser language
  * or manual setting.
  *
  * Requirement: https://github.com/klokantech/openmaptiles-language/
