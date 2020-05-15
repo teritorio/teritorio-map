@@ -3,15 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <title>Change a map's boundaries</title>
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
-    <link
-      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css"
-      rel="stylesheet"
-    />
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
 
     <script src="../../dist/teritorio.umd.production.min.js"></script>
 
@@ -61,17 +55,15 @@
         >.
       </p>
       <p>
-        If the country is included on the way "disputed_by" tag the boundary is
-        dashed. If the country is included on the relation "claimed_by" tag the
-        boundary is plain.
+        If the country is included on the way "disputed_by" tag the boundary is dashed. If the
+        country is included on the relation "claimed_by" tag the boundary is plain.
       </p>
     </div>
 
     <script type="text/javascript">
       const map = new mapboxgl.Map({
         container: document.querySelector('.map'),
-        style:
-          'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
         center: [79.23, 32.73],
         zoom: 4.1,
         maxZoom: 6,
@@ -81,17 +73,15 @@
       map.on('load', function() {
         const border = teritorio.border(map);
 
-        document
-          .querySelector('.top-buttons')
-          .addEventListener('click', function(event) {
-            event.stopPropagation();
+        document.querySelector('.top-buttons').addEventListener('click', function(event) {
+          event.stopPropagation();
 
-            if (event.target.dataset.border) {
-              border.setBorder(event.target.dataset.border);
-            } else {
-              border.resetBorder();
-            }
-          });
+          if (event.target.dataset.border) {
+            border.setBorder(event.target.dataset.border);
+          } else {
+            border.resetBorder();
+          }
+        });
       });
     </script>
   </body>
