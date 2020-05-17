@@ -8,10 +8,6 @@ Collection of helper functions to add some features to Mapbox GL JS related to T
 - [icon](https://teritorio.github.io/teritorio-map/icon): Select and switch icon emphases, full colored icons of small discreet icons.
 - [language](https://teritorio.github.io/teritorio-map/language): Select and switch the map display language, either by auto-detection of the browser language or manual setting.
 
-### Interaction
-
-- [click](https://teritorio.github.io/teritorio-map/click): Get details of map objects.
-
 ## Usage
 
 The project is bundled in several formats so you can use it everywhere.
