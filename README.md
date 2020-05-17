@@ -58,7 +58,7 @@ language(/* ... */);
 
 ## Requirements
 
-- https://github.com/mapbox/mapbox-gl-js
+- https://github.com/mapbox/mapbox-gl-js (>= v1.10.1)
 - https://github.com/klokantech/openmaptiles-language (only for the `language` feature)
 
 ## Contribution
