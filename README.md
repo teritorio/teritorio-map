@@ -8,6 +8,7 @@ Collection of helper functions to add some features to Mapbox GL JS related to T
 - [icon](https://teritorio.github.io/teritorio-map/icon): Select and switch icon emphases, full colored icons of small discreet icons.
 - [language](https://teritorio.github.io/teritorio-map/language): Select and switch the map display language, either by auto-detection of the browser language or manual setting.
 - [building3d](https://teritorio.github.io/teritorio-map/building3d): Select and switch the way to display building in 3D or not.
+- [poiFilter](https://teritorio.github.io/teritorio-map/poiFilter): Show or Hide POIs by thematic.
 
 ## Usage
 
