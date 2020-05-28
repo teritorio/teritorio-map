@@ -23,7 +23,7 @@ To use in your HTML files:
 ```html
 <script
   type="text/javascript"
-  src="https://unpkg.com/@teritorio/map@0.2.1/dist/teritorio.umd.production.min.js"
+  src="https://unpkg.com/@teritorio/map@0.4.1/dist/teritorio.umd.production.min.js"
 ></script>
 
 <script type="text/javascript">
@@ -47,7 +47,7 @@ language(/* ... */);
 
 ```html
 <script type="module">
-  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.2.1/dist/teritorio.esm.js';
+  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.4.1/dist/teritorio.esm.js';
 
   icon(/* ... */);
   language(/* ... */);
