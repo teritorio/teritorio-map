@@ -5,11 +5,10 @@ enum StyleName {
   Picto = 'picto',
 }
 
-// `any` as in Mapbox GL typings :(
 interface Styles {
-  beforeLayer?: any;
-  imageLayout?: any;
-  textColor?: any;
+  beforeLayer?: string;
+  imageLayout?: MapboxValues;
+  textColor?: MapboxValues;
 }
 
 interface Options {

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Filter POI</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/@teritorio/map@0.3.0/dist/teritorio.umd.production.min.js"></script>
+
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="map"></div>
+
+    <ul class="top-buttons">
+      <li><button data-filter="unset">All</button></li>
+      <li><button data-filter="include-catering">Only Catering</button></li>
+      <li><button data-filter="exclude-catering">No Catering</button></li>
+      <li><button data-filter="include-sport-pastry">Only Park & Restaurant</button></li>
+    </ul>
+
+    <script type="text/javascript">
+      const map = new mapboxgl.Map({
+        container: document.querySelector('.map'),
+        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        center: [-1.559646, 43.482489],
+        zoom: 16.54,
+        maxZoom: 20,
+        hash: true,
+      });
+
+      map.on('load', function() {
+        const poiFilter = teritorio.poiFilter(map);
+
+        document.querySelector('.top-buttons').addEventListener('click', function(event) {
+          event.stopPropagation();
+
+          if (event.target.dataset.filter == 'include-catering') {
+            poiFilter.setIncludeFilter([['catering']]);
+          } else if (event.target.dataset.filter == 'exclude-catering') {
+            poiFilter.setExcludeFilter([['catering']]);
+          } else if (event.target.dataset.filter == 'include-sport-pastry') {
+            poiFilter.setIncludeFilter([
+              ['catering', 'food', 'restaurant'],
+              ['leisure', 'park'],
+            ]);
+          } else {
+            poiFilter.unsetFilter();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
