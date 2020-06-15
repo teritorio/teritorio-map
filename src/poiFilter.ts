@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 
 interface Options {
-  filter?: MapboxValues;
+  filter?: MapboxExpr;
   include?: boolean;
 }
 
@@ -11,10 +11,10 @@ export function poiFilter(map: mapboxgl.Map, options?: Options) {
   }
 
   return {
-    setExcludeFilter(filter: MapboxValues) {
+    setExcludeFilter(filter: MapboxExpr) {
       applyFilter(map, filter, false);
     },
-    setIncludeFilter(filter: MapboxValues) {
+    setIncludeFilter(filter: MapboxExpr) {
       applyFilter(map, filter, true);
     },
     unsetFilter() {
@@ -32,10 +32,10 @@ const poiLayers = [
   'poi-level-3-icon',
 ];
 
-const filterId = ['==', ['literal', '__poiFilter'], '__poiFilter'];
+const filterId: MapboxExpr = ['let', '_bloc_name', 'poiFilter'];
 
-function pruneFilter(filter: MapboxValues) {
-  if (!filter || !Array.isArray(filter) || filter[0] !== 'all') {
+function pruneFilter(filter: MapboxExpr) {
+  if (!filter || filter[0] !== 'all') {
     return undefined;
   }
 
@@ -43,29 +43,26 @@ function pruneFilter(filter: MapboxValues) {
     close =>
       !(
         Array.isArray(close) &&
-        close.length >= 2 &&
-        close[0] === 'all' &&
-        JSON.stringify(close[1]) === JSON.stringify(filterId)
+        close.length === filterId.length + 1 &&
+        close[0] === filterId[0] &&
+        close[1] === filterId[1] &&
+        close[2] === filterId[2]
       ),
   );
 }
 
-function formatExpressionLiterals(filters: MapboxValues[], filterLength: number) {
+function formatExpressionLiterals(filters: MapboxExpr, filterLength: number) {
   return filters
-    .filter((f): f is MapboxValues[] => Array.isArray(f) && f.length === filterLength)
+    .filter((f): f is MapboxExpr => Array.isArray(f) && f.length === filterLength)
     .map(f => (filterLength === 1 ? f[0] : f.join('|')));
 }
 
-function createFilterExpression(filter: MapboxValues) {
-  if (!filter || !Array.isArray(filter)) {
-    return undefined;
-  }
-
+function createFilterExpression(filter: MapboxExpr) {
   const f1 = formatExpressionLiterals(filter, 1);
   const f2 = formatExpressionLiterals(filter, 2);
   const f3 = formatExpressionLiterals(filter, 3);
 
-  const expression: MapboxValues = ['any'];
+  const expression: MapboxExpr = ['any'];
 
   if (f1.length > 0) {
     expression.push(['in', ['get', 'tourism_superclass'], ['literal', f1]]);
@@ -96,17 +93,17 @@ function createFilterExpression(filter: MapboxValues) {
   return expression;
 }
 
-function applyFilter(map: mapboxgl.Map, filter: MapboxValues, include: boolean = true) {
+function applyFilter(map: mapboxgl.Map, filter: MapboxExpr, include: boolean = true) {
   if (!filter || !Array.isArray(filter)) {
     return;
   }
 
-  let expression: MapboxValues;
+  let expression: MapboxExpr;
 
   if (include) {
-    expression = ['all', filterId, createFilterExpression(filter)];
+    expression = filterId.concat([createFilterExpression(filter)]);
   } else {
-    expression = ['all', filterId, ['!', createFilterExpression(filter)]];
+    expression = filterId.concat([['!', createFilterExpression(filter)]]);
   }
 
   poiLayers.forEach(layerId => {

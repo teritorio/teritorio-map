@@ -41,7 +41,7 @@ interface Options {
  * Select and switch icon emphases, full colored icons of small discreet icons.
  */
 export function icon(map: mapboxgl.Map, options?: Options) {
-  const styles = {
+  const styles: { [key in StyleName]: Styles } = {
     [StyleName.Icon]: {
       beforeLayer: 'park-reserve-name-small',
       imageLayout: map.getLayoutProperty('poi-level-1', 'icon-image'),
