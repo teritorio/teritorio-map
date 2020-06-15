@@ -1,3 +1,4 @@
 declare var __DEV__: boolean;
 
-type MapboxValues = undefined | string | number | boolean | null | MapboxValues[];
+type MapboxValues = undefined | string | number | boolean | null | MapboxExpr;
+type MapboxExpr = MapboxValues[];
