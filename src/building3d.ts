@@ -20,7 +20,7 @@ export function building3d(map: mapboxgl.Map, options?: Options) {
   };
 }
 
-export function set3d(map: mapboxgl.Map, is3d: boolean, pitch: number = 60) {
+function set3d(map: mapboxgl.Map, is3d: boolean, pitch: number = 60) {
   if (is3d) {
     // Make it 3D
     if (typeof pitch !== 'undefined') {

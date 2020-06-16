@@ -5,9 +5,6 @@ interface Options {
   include?: boolean;
 }
 
-/**
- * Select and switch 3D building.
- */
 export function poiFilter(map: mapboxgl.Map, options?: Options) {
   if (options?.filter) {
     applyFilter(map, options?.filter, options?.include);
@@ -124,7 +121,7 @@ function applyFilter(map: mapboxgl.Map, filter: MapboxValues, include: boolean =
   });
 }
 
-export function unsetFilter(map: mapboxgl.Map) {
+function unsetFilter(map: mapboxgl.Map) {
   poiLayers.forEach(layerId => {
     const styleFilter = pruneFilter(map.getFilter(layerId));
 
