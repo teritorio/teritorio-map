@@ -18,7 +18,10 @@ export function poiFilter(map: mapboxgl.Map, options?: Options) {
     setIncludeFilter(filter: MapboxExpr, picto: boolean = true) {
       applyFilter(map, filter, true, picto);
     },
-    unsetFilter() {
+    remove(picto: boolean = true) {
+      applyFilter(map, [], true, picto);
+    },
+    reset() {
       unsetFilter(map);
     },
   };

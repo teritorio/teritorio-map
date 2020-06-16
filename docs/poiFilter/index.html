@@ -55,9 +55,9 @@
               ['leisure', 'park'],
             ], picto);
           } else if (event.target.dataset.filter.endsWith('none')) {
-            poiFilter.setIncludeFilter([], picto);
+            poiFilter.remove(picto);
           } else if (event.target.dataset.filter == 'reset') {
-            poiFilter.unsetFilter();
+            poiFilter.reset();
           }
         });
       });
