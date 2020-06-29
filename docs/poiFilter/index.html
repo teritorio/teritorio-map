@@ -7,7 +7,7 @@
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map@0.4.1/dist/teritorio.umd.production.min.js"></script>
+    <script src="https://unpkg.com/@teritorio/map@0.5.0/dist/teritorio.umd.production.min.js"></script>
 
     <link href="../styles.css" rel="stylesheet" />
   </head>
@@ -21,7 +21,11 @@
       <li><button data-filter="none">None</button></li>
       <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
       <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
-      <li><button data-filter="picto-include-park-restaurant">Only Park and Restaurant + picto</button></li>
+      <li>
+        <button data-filter="picto-include-park-restaurant">
+          Only Park and Restaurant + picto
+        </button>
+      </li>
       <li><button data-filter="include-catering">Only Catering</button></li>
       <li><button data-filter="exclude-catering">No Catering</button></li>
       <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
@@ -50,10 +54,13 @@
           } else if (event.target.dataset.filter.endsWith('exclude-catering')) {
             poiFilter.setExcludeFilter([['catering']], picto);
           } else if (event.target.dataset.filter.endsWith('include-park-restaurant')) {
-            poiFilter.setIncludeFilter([
-              ['catering', 'food', 'restaurant'],
-              ['leisure', 'park'],
-            ], picto);
+            poiFilter.setIncludeFilter(
+              [
+                ['catering', 'food', 'restaurant'],
+                ['leisure', 'park'],
+              ],
+              picto,
+            );
           } else if (event.target.dataset.filter.endsWith('none')) {
             poiFilter.remove(picto);
           } else if (event.target.dataset.filter == 'reset') {
