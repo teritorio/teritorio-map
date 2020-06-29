@@ -16,10 +16,15 @@
     <div class="map"></div>
 
     <ul class="top-buttons">
-      <li><button data-filter="unset">All</button></li>
+      <li><button data-filter="reset">Reset</button></li>
+      <li><button data-filter="picto-none">Picto</button></li>
+      <li><button data-filter="none">None</button></li>
+      <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
+      <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
+      <li><button data-filter="picto-include-park-restaurant">Only Park and Restaurant + picto</button></li>
       <li><button data-filter="include-catering">Only Catering</button></li>
       <li><button data-filter="exclude-catering">No Catering</button></li>
-      <li><button data-filter="include-sport-pastry">Only Park & Restaurant</button></li>
+      <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
     </ul>
 
     <script type="text/javascript">
@@ -38,17 +43,21 @@
         document.querySelector('.top-buttons').addEventListener('click', function(event) {
           event.stopPropagation();
 
-          if (event.target.dataset.filter == 'include-catering') {
-            poiFilter.setIncludeFilter([['catering']]);
-          } else if (event.target.dataset.filter == 'exclude-catering') {
-            poiFilter.setExcludeFilter([['catering']]);
-          } else if (event.target.dataset.filter == 'include-sport-pastry') {
+          const picto = event.target.dataset.filter.startsWith('picto');
+
+          if (event.target.dataset.filter.endsWith('include-catering')) {
+            poiFilter.setIncludeFilter([['catering']], picto);
+          } else if (event.target.dataset.filter.endsWith('exclude-catering')) {
+            poiFilter.setExcludeFilter([['catering']], picto);
+          } else if (event.target.dataset.filter.endsWith('include-park-restaurant')) {
             poiFilter.setIncludeFilter([
               ['catering', 'food', 'restaurant'],
               ['leisure', 'park'],
-            ]);
-          } else {
-            poiFilter.unsetFilter();
+            ], picto);
+          } else if (event.target.dataset.filter.endsWith('none')) {
+            poiFilter.remove(picto);
+          } else if (event.target.dataset.filter == 'reset') {
+            poiFilter.reset();
           }
         });
       });
