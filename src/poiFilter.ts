@@ -185,11 +185,20 @@ function ammendPictoFilter(filter: MapboxExpr, styleExpression: MapboxExpr) {
 }
 
 function resetPictoLayout(expr: MapboxExpr) {
-  if (!expr || expr[0] !== 'let') {
+  if (!expr || !expr[4]) {
     return undefined;
   }
 
-  expr[2] = defaultStyle;
+  if (
+    !Array.isArray(expr[4]) ||
+    expr[4][0] !== 'case' ||
+    !Array.isArray(expr[4][1]) ||
+    expr[4][1][0] !== 'let'
+  ) {
+    return undefined;
+  }
+
+  expr[4] = defaultStyle;
 
   return expr;
 }
@@ -210,7 +219,7 @@ function applyPictoLayout(map: mapboxgl.Map, filter: MapboxExpr, include: boolea
     if (!layout) {
       console.warn(`Cannot amend filter of layer "${layerId}"`);
     } else {
-      layout[2] = styleExpression;
+      layout[4] = styleExpression;
       map.setLayoutProperty(layerId, 'icon-image', layout);
     }
 
