@@ -22,7 +22,7 @@ To use in your HTML files:
 ```html
 <script
   type="text/javascript"
-  src="https://unpkg.com/@teritorio/map@0.6.0/dist/teritorio.umd.production.min.js"
+  src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"
 ></script>
 
 <script type="text/javascript">
@@ -46,7 +46,7 @@ language(/* ... */);
 
 ```html
 <script type="module">
-  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.6.0/dist/teritorio.esm.js';
+  import { icon, language } from 'https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.esm.js';
 
   icon(/* ... */);
   language(/* ... */);
@@ -55,8 +55,8 @@ language(/* ... */);
 
 ## Requirements
 
-- https://github.com/mapbox/mapbox-gl-js (>= v1.10.1)
-- https://github.com/klokantech/openmaptiles-language (only for the `language` feature)
+- <https://github.com/mapbox/mapbox-gl-js> (>= v1.10.1)
+- <https://github.com/klokantech/openmaptiles-language> (only for the `language` feature)
 
 ## Contribution
 
