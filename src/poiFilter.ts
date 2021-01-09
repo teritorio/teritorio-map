@@ -78,13 +78,13 @@ function createFilterExpression(filter: MapboxExpr) {
   const expression: MapboxExpr = ['any'];
 
   if (f1.length > 0) {
-    expression.push(['in', ['get', 'tourism_superclass'], ['literal', f1]]);
+    expression.push(['in', ['get', 'superclass'], ['literal', f1]]);
   }
 
   if (f2.length > 0) {
     expression.push([
       'in',
-      ['concat', ['get', 'tourism_superclass'], '|', ['get', 'tourism_class']],
+      ['concat', ['get', 'superclass'], '|', ['get', 'class']],
       ['literal', f2],
     ]);
   }
@@ -92,14 +92,7 @@ function createFilterExpression(filter: MapboxExpr) {
   if (f3.length > 0) {
     expression.push([
       'in',
-      [
-        'concat',
-        ['get', 'tourism_superclass'],
-        '|',
-        ['get', 'tourism_class'],
-        '|',
-        ['get', 'tourism_subclass'],
-      ],
+      ['concat', ['get', 'superclass'], '|', ['get', 'class'], '|', ['get', 'subclass']],
       ['literal', f3],
     ]);
   }
@@ -161,7 +154,7 @@ function unsetHideFilter(map: mapboxgl.Map) {
 // Switch to picto
 
 const filterPictoId: MapboxExpr = ['let', '_bloc_name', 'styleFilter'];
-const defaultStyle: MapboxExpr = ['get', 'tourism_style'];
+const defaultStyle: MapboxExpr = ['get', 'style'];
 
 function ammendPictoFilter(filter: MapboxExpr, styleExpression: MapboxExpr) {
   if (!filter || filter[0] !== 'all') {
