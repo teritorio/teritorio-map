@@ -6,9 +6,45 @@ interface Options {
   picto?: boolean;
 }
 
+type StyleHandler = mapboxgl.Map | StyleObjectWrapper;
+
+class StyleObjectWrapper {
+  style: any;
+
+  constructor(style: any) {
+    this.style = style;
+  }
+
+  getLayer(layerId: string) {
+    return this.style.layers.find((layer: any) => layer.id == layerId);
+  }
+
+  getFilter(layerId: string) {
+    return this.getLayer(layerId).filter;
+  }
+
+  setFilter(layerId: string, filter?: MapboxExpr) {
+    this.getLayer(layerId).filter = filter;
+  }
+
+  getLayoutProperty(layerId: string, property: string) {
+    return this.getLayer(layerId).layout[property];
+  }
+
+  setLayoutProperty(layerId: string, property: string, value?: any) {
+    this.getLayer(layerId).layout[property] = value;
+  }
+}
+
+export function poiInitFilter(style: Object, options?: Options) {
+  const styleHandler = new StyleObjectWrapper(style);
+  applyFilter(styleHandler, options?.filter, options?.include, options?.picto);
+  return styleHandler.style;
+}
+
 export function poiFilter(map: mapboxgl.Map, options?: Options) {
   if (options?.filter) {
-    applyFilter(map, options?.filter, options?.include);
+    applyFilter(map, options?.filter, options?.include, options?.picto);
   }
 
   return {
@@ -30,8 +66,8 @@ export function poiFilter(map: mapboxgl.Map, options?: Options) {
 // Redirection function
 
 function applyFilter(
-  map: mapboxgl.Map,
-  filter: MapboxExpr,
+  styleHandler: StyleHandler,
+  filter?: MapboxExpr,
   include: boolean = true,
   picto: boolean = true,
 ) {
@@ -40,17 +76,17 @@ function applyFilter(
   }
 
   if (picto) {
-    unsetHideFilter(map);
-    applyPictoLayout(map, filter, include);
+    unsetHideFilter(styleHandler);
+    applyPictoLayout(styleHandler, filter, include);
   } else {
-    unsetPictoLayout(map);
-    applyHideFilter(map, filter, include);
+    unsetPictoLayout(styleHandler);
+    applyHideFilter(styleHandler, filter, include);
   }
 }
 
-function unsetFilter(map: mapboxgl.Map) {
-  unsetHideFilter(map);
-  unsetPictoLayout(map);
+function unsetFilter(styleHandler: StyleHandler) {
+  unsetHideFilter(styleHandler);
+  unsetPictoLayout(styleHandler);
 }
 
 const poiLayers = [
@@ -118,7 +154,7 @@ function pruneHideFilter(filter: MapboxExpr) {
   );
 }
 
-function applyHideFilter(map: mapboxgl.Map, filter: MapboxExpr, include: boolean = true) {
+function applyHideFilter(styleHandler: StyleHandler, filter: MapboxExpr, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
@@ -128,25 +164,25 @@ function applyHideFilter(map: mapboxgl.Map, filter: MapboxExpr, include: boolean
   }
 
   poiLayers.forEach(layerId => {
-    const styleFilter = pruneHideFilter(map.getFilter(layerId));
+    const styleFilter = pruneHideFilter(styleHandler.getFilter(layerId));
 
     if (!styleFilter) {
       console.warn(`Cannot amend filter of layer "${layerId}"`);
     } else {
       styleFilter.push(expression);
-      map.setFilter(layerId, styleFilter);
+      styleHandler.setFilter(layerId, styleFilter);
     }
   });
 }
 
-function unsetHideFilter(map: mapboxgl.Map) {
+function unsetHideFilter(styleHandler: StyleHandler) {
   poiLayers.forEach(layerId => {
-    const styleFilter = pruneHideFilter(map.getFilter(layerId));
+    const styleFilter = pruneHideFilter(styleHandler.getFilter(layerId));
 
     if (!styleFilter) {
       console.warn(`Cannot amend filter of layer "${layerId}"`);
     } else {
-      map.setFilter(layerId, styleFilter);
+      styleHandler.setFilter(layerId, styleFilter);
     }
   });
 }
@@ -196,7 +232,7 @@ function resetPictoLayout(expr: MapboxExpr) {
   return expr;
 }
 
-function applyPictoLayout(map: mapboxgl.Map, filter: MapboxExpr, include: boolean = true) {
+function applyPictoLayout(styleHandler: StyleHandler, filter: MapboxExpr, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
@@ -206,30 +242,36 @@ function applyPictoLayout(map: mapboxgl.Map, filter: MapboxExpr, include: boolea
   }
 
   poiLayers.forEach(layerId => {
-    const layout = map.getLayoutProperty(layerId, 'icon-image');
+    const layout = styleHandler.getLayoutProperty(layerId, 'icon-image');
     const styleExpression = ['case', expression, '•', defaultStyle];
 
     if (!layout) {
       console.warn(`Cannot amend filter of layer "${layerId}"`);
     } else {
       layout[4] = styleExpression;
-      map.setLayoutProperty(layerId, 'icon-image', layout);
+      styleHandler.setLayoutProperty(layerId, 'icon-image', layout);
     }
 
-    map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), styleExpression));
+    styleHandler.setFilter(
+      layerId,
+      ammendPictoFilter(styleHandler.getFilter(layerId), styleExpression),
+    );
   });
 }
 
-function unsetPictoLayout(map: mapboxgl.Map) {
+function unsetPictoLayout(styleHandler: StyleHandler) {
   poiLayers.forEach(layerId => {
-    const layout = resetPictoLayout(map.getLayoutProperty(layerId, 'icon-image'));
+    const layout = resetPictoLayout(styleHandler.getLayoutProperty(layerId, 'icon-image'));
 
     if (!layout) {
       console.warn(`Cannot amend layout of layer "${layerId}"`);
     } else {
-      map.setLayoutProperty(layerId, 'icon-image', layout);
+      styleHandler.setLayoutProperty(layerId, 'icon-image', layout);
     }
 
-    map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), defaultStyle));
+    styleHandler.setFilter(
+      layerId,
+      ammendPictoFilter(styleHandler.getFilter(layerId), defaultStyle),
+    );
   });
 }
