@@ -6,25 +6,61 @@ interface Options {
   picto?: boolean;
 }
 
-export function poiFilter(map: mapboxgl.Map, options?: Options) {
-  if (options?.filter) {
-    applyFilter(map, options?.filter, options?.include);
+export class PoiFilter {
+  _map?: mapboxgl.Map;
+  _options?: Options;
+  _container: any;
+  _initialUpdateBind: () => void;
+
+  constructor(options?: Options) {
+    this._options = options;
+    this._initialUpdateBind = this._initialStyleUpdate.bind(this);
   }
 
-  return {
-    setExcludeFilter(filter: MapboxExpr, picto: boolean = true) {
-      applyFilter(map, filter, false, picto);
-    },
-    setIncludeFilter(filter: MapboxExpr, picto: boolean = true) {
-      applyFilter(map, filter, true, picto);
-    },
-    remove(picto: boolean = true) {
-      applyFilter(map, [], true, picto);
-    },
-    reset() {
-      unsetFilter(map);
-    },
-  };
+  _initialStyleUpdate() {
+    // We only update the style once
+    this._map?.off('styledata', this._initialUpdateBind);
+
+    if (this._map && this._options?.filter) {
+      applyFilter(this._map, this._options?.filter, this._options?.include, this._options?.picto);
+    }
+  }
+
+  onAdd(map: mapboxgl.Map) {
+    this._map = map;
+    this._map.on('styledata', this._initialUpdateBind);
+    this._container = document.createElement('div');
+    return this._container;
+  }
+
+  onRemove() {
+    this._map?.off('styledata', this._initialUpdateBind);
+    this._map = undefined;
+  }
+
+  setExcludeFilter(filter: MapboxExpr, picto: boolean = true) {
+    if (this._map) {
+      applyFilter(this._map, filter, false, picto);
+    }
+  }
+
+  setIncludeFilter(filter: MapboxExpr, picto: boolean = true) {
+    if (this._map) {
+      applyFilter(this._map, filter, true, picto);
+    }
+  }
+
+  remove(picto: boolean = true) {
+    if (this._map) {
+      applyFilter(this._map, [], true, picto);
+    }
+  }
+
+  reset() {
+    if (this._map) {
+      unsetFilter(this._map);
+    }
+  }
 }
 
 // Redirection function
