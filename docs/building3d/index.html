@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Switch buildings in 3D</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Switch buildings in 3D</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <link href="../styles.css" rel="stylesheet" />
-  </head>
+  <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
 
-  <body>
-    <div class="map"></div>
+  <link href="../styles.css" rel="stylesheet" />
+</head>
 
-    <ul class="top-buttons">
-      <li><button data-is3d="false">Flat</button></li>
-      <li><button data-is3d="true">3D</button></li>
-    </ul>
+<body>
+  <div class="map"></div>
 
-    <script type="text/javascript">
-      const map = new mapboxgl.Map({
-        container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
-        center: [-1.559646, 43.482489],
-        zoom: 16.54,
-        maxZoom: 20,
-        hash: true,
-      });
+  <ul class="top-buttons">
+    <li><button data-building3d="false">Flat</button></li>
+    <li><button data-building3d="true">3D</button></li>
+  </ul>
 
-      map.on('load', function() {
-        const building = teritorio.building3d(map);
+  <script type="text/javascript">
+    const map = new mapboxgl.Map({
+      container: document.querySelector('.map'),
+      style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
+      center: [-1.559646, 43.482489],
+      zoom: 16.54,
+      maxZoom: 20,
+      hash: true,
+    });
 
-        document.querySelector('.top-buttons').addEventListener('click', function(event) {
-          event.stopPropagation();
+    const building3d = new teritorio.Building3d({
+      building3d: true,
+    });
+    map.addControl(building3d);
 
-          if (event.target.dataset.is3d) {
-            building.set3d(event.target.dataset.is3d === 'true');
-          }
-        });
-      });
-    </script>
-  </body>
+    document.querySelector('.top-buttons').addEventListener('click', function(event) {
+      event.stopPropagation();
+
+      if (event.target.dataset.building3d) {
+        building3d.set3d(event.target.dataset.building3d === 'true');
+      }
+    });
+  </script>
+</body>
+
 </html>

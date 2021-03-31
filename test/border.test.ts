@@ -1,7 +1,7 @@
-import { border } from '../src';
+import { Border } from '../src';
 
-describe('border', () => {
+describe('Border', () => {
   test('is exported', () => {
-    expect(border).toBeTruthy();
+    expect(Border).toBeTruthy();
   });
 });

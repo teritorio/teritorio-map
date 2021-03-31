@@ -1,27 +1,38 @@
 import mapboxgl from 'mapbox-gl';
+import { Control } from './control';
 
 interface Options {
-  default3d?: boolean;
-  defaultPitch?: number;
+  building3d?: boolean;
+  pitch?: number;
 }
 
 /**
  * Select and switch 3D building.
  */
-export function building3d(map: mapboxgl.Map, options?: Options) {
-  if (options?.default3d) {
-    set3d(map, options?.default3d, options?.defaultPitch);
+export class Building3d extends Control {
+  _options?: Options;
+
+  constructor(options?: Options) {
+    super();
+    this._options = options;
   }
 
-  return {
-    set3d(is3d: boolean, pitch: number) {
-      set3d(map, is3d, pitch);
-    },
-  };
+  _initialUpdate() {
+    super._initialUpdate();
+    if (this._map && this._options?.building3d) {
+      set3d(this._map, this._options.building3d, this._options?.pitch);
+    }
+  }
+
+  set3d(building3d: boolean, pitch: number) {
+    if (this._map) {
+      set3d(this._map, building3d, pitch);
+    }
+  }
 }
 
-function set3d(map: mapboxgl.Map, is3d: boolean, pitch: number = 60) {
-  if (is3d) {
+function set3d(map: mapboxgl.Map, building3d: boolean, pitch: number = 60) {
+  if (building3d) {
     // Make it 3D
     if (typeof pitch !== 'undefined') {
       map.easeTo({ pitch, duration: 500 });

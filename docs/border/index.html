@@ -1,47 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Change a map's boundaries</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Change a map's boundaries</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <link href="../styles.css" rel="stylesheet" />
-  </head>
+  <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
 
-  <body>
-    <div class="map"></div>
+  <link href="../styles.css" rel="stylesheet" />
+</head>
 
-    <ul class="top-buttons">
-      <li><button>Default</button></li>
-      <li><button data-border="ma">Morocco</button></li>
-      <li><button data-border="eh">Western Sahara</button></li>
-      <li><button data-border="rs">Serbia</button></li>
-      <li><button data-border="xk">Kosovo</button></li>
-      <li><button data-border="ru">Russia</button></li>
-      <li><button data-border="ua">Ukraine</button></li>
-      <li><button data-border="cn">China</button></li>
-      <li><button data-border="in">India</button></li>
-      <li><button data-border="pk">Pakistan</button></li>
-      <li><button data-border="bt">Bhutan</button></li>
-      <li><button data-border="sd">Sudan</button></li>
-      <li><button data-border="ss">South Sudan</button></li>
-    </ul>
+<body>
+  <div class="map"></div>
 
-    <div class="explanation">
-      <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
-      <p>Boundaries exclusively from OpenStreetMap.</p>
-      <p>Last data update 2019-08-23.</p>
-      <p>
-        Build with
-        <a
-          href="https://github.com/frodrigo/osmborder/tree/disputed_claim"
-          target="_blank"
-          rel="noopener noreferrer"
-          >modifier osmborder</a
+  <ul class="top-buttons">
+    <li><button>Default</button></li>
+    <li><button data-border="ma">Morocco</button></li>
+    <li><button data-border="eh">Western Sahara</button></li>
+    <li><button data-border="rs">Serbia</button></li>
+    <li><button data-border="xk">Kosovo</button></li>
+    <li><button data-border="ru">Russia</button></li>
+    <li><button data-border="ua">Ukraine</button></li>
+    <li><button data-border="cn">China</button></li>
+    <li><button data-border="in">India</button></li>
+    <li><button data-border="pk">Pakistan</button></li>
+    <li><button data-border="bt">Bhutan</button></li>
+    <li><button data-border="sd">Sudan</button></li>
+    <li><button data-border="ss">South Sudan</button></li>
+  </ul>
+
+  <div class="explanation">
+    <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
+    <p>Boundaries exclusively from OpenStreetMap.</p>
+    <p>Last data update 2019-08-23.</p>
+    <p>
+      Build with
+      <a href="https://github.com/frodrigo/osmborder/tree/disputed_claim" target="_blank" rel="noopener noreferrer">modifier osmborder</a
         >
         and modified OpenMapTiles.
       </p>
@@ -63,25 +60,26 @@
     <script type="text/javascript">
       const map = new mapboxgl.Map({
         container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
         center: [79.23, 32.73],
         zoom: 4.1,
         maxZoom: 6,
         hash: true,
       });
 
-      map.on('load', function() {
-        const border = teritorio.border(map);
+      const border = new teritorio.Border({
+        country: 'cn',
+      });
+      map.addControl(border);
 
-        document.querySelector('.top-buttons').addEventListener('click', function(event) {
-          event.stopPropagation();
+      document.querySelector('.top-buttons').addEventListener('click', function(event) {
+        event.stopPropagation();
 
-          if (event.target.dataset.border) {
-            border.setBorder(event.target.dataset.border);
-          } else {
-            border.resetBorder();
-          }
-        });
+        if (event.target.dataset.border) {
+          border.setBorder(event.target.dataset.border);
+        } else {
+          border.resetBorder();
+        }
       });
     </script>
   </body>

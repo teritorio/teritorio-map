@@ -1,4 +1,5 @@
 import mapboxgl from 'mapbox-gl';
+import { Control } from './control';
 
 interface Options {
   filter?: MapboxExpr;
@@ -6,36 +7,19 @@ interface Options {
   picto?: boolean;
 }
 
-export class PoiFilter {
-  _map?: mapboxgl.Map;
+export class PoiFilter extends Control {
   _options?: Options;
-  _container: any;
-  _initialUpdateBind: () => void;
 
   constructor(options?: Options) {
+    super();
     this._options = options;
-    this._initialUpdateBind = this._initialStyleUpdate.bind(this);
   }
 
   _initialStyleUpdate() {
-    // We only update the style once
-    this._map?.off('styledata', this._initialUpdateBind);
-
+    super._initialUpdate();
     if (this._map && this._options?.filter) {
       applyFilter(this._map, this._options?.filter, this._options?.include, this._options?.picto);
     }
-  }
-
-  onAdd(map: mapboxgl.Map) {
-    this._map = map;
-    this._map.on('styledata', this._initialUpdateBind);
-    this._container = document.createElement('div');
-    return this._container;
-  }
-
-  onRemove() {
-    this._map?.off('styledata', this._initialUpdateBind);
-    this._map = undefined;
   }
 
   setExcludeFilter(filter: MapboxExpr, picto: boolean = true) {
