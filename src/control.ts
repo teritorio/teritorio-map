@@ -1,7 +1,7 @@
 import mapboxgl from 'mapbox-gl';
 
 export class Control {
-  _map?: mapboxgl.Map;
+  protected _map?: mapboxgl.Map;
   protected _container: any;
   private _initialUpdateBind: () => void;
 

@@ -10,14 +10,14 @@ interface Options {
  * Select and switch 3D building.
  */
 export class Building3d extends Control {
-  _options?: Options;
+  private _options?: Options;
 
   constructor(options?: Options) {
     super();
     this._options = options;
   }
 
-  _initialUpdate() {
+  protected _initialUpdate() {
     super._initialUpdate();
     if (this._map && this._options?.building3d) {
       set3d(this._map, this._options.building3d, this._options?.pitch);

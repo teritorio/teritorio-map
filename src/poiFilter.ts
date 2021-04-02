@@ -8,14 +8,14 @@ interface Options {
 }
 
 export class PoiFilter extends Control {
-  _options?: Options;
+  private _options?: Options;
 
   constructor(options?: Options) {
     super();
     this._options = options;
   }
 
-  _initialUpdate() {
+  protected _initialUpdate() {
     super._initialUpdate();
     if (this._map && this._options?.filter) {
       applyFilter(this._map, this._options?.filter, this._options?.include, this._options?.picto);

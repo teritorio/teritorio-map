@@ -42,14 +42,14 @@ let isInitialized = false;
  * Select and switch borders point of view according to different countries definition.
  */
 export class Border extends Control {
-  _options?: Options;
+  private _options?: Options;
 
   constructor(options?: Options) {
     super();
     this._options = options;
   }
 
-  _initialUpdate() {
+  protected _initialUpdate() {
     super._initialUpdate();
     if (this._map) {
       init(this._map);

@@ -12,14 +12,14 @@ interface Options {
  * Requirement: https://github.com/klokantech/openmaptiles-language/
  */
 export class Language extends Control {
-  _options?: Options;
+  private _options?: Options;
 
   constructor(options?: Options) {
     super();
     this._options = options;
   }
 
-  _initialUpdate() {
+  protected _initialUpdate() {
     super._initialUpdate();
 
     if (this._map) {
