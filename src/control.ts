@@ -2,14 +2,14 @@ import mapboxgl from 'mapbox-gl';
 
 export class Control {
   _map?: mapboxgl.Map;
-  _container: any;
-  _initialUpdateBind: () => void;
+  protected _container: any;
+  private _initialUpdateBind: () => void;
 
   constructor() {
     this._initialUpdateBind = this._initialUpdate.bind(this);
   }
 
-  _initialUpdate() {
+  protected _initialUpdate() {
     // We only update the style once
     this._map?.off('styledata', this._initialUpdateBind);
   }

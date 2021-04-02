@@ -15,7 +15,7 @@ export class PoiFilter extends Control {
     this._options = options;
   }
 
-  _initialStyleUpdate() {
+  _initialUpdate() {
     super._initialUpdate();
     if (this._map && this._options?.filter) {
       applyFilter(this._map, this._options?.filter, this._options?.include, this._options?.picto);
