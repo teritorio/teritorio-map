@@ -1,74 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Filter POI</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-<head>
-  <meta charset="utf-8" />
-  <title>Filter POI</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
 
-  <link href="../styles.css" rel="stylesheet" />
-</head>
+  <body>
+    <div class="map"></div>
 
-<body>
-  <div class="map"></div>
+    <ul class="top-buttons">
+      <li><button data-filter="reset">Reset</button></li>
+      <li><button data-filter="picto-none">Picto</button></li>
+      <li><button data-filter="none">None</button></li>
+      <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
+      <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
+      <li>
+        <button data-filter="picto-include-park-restaurant">
+          Only Park and Restaurant + picto
+        </button>
+      </li>
+      <li><button data-filter="include-catering">Only Catering</button></li>
+      <li><button data-filter="exclude-catering">No Catering</button></li>
+      <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
+    </ul>
 
-  <ul class="top-buttons">
-    <li><button data-filter="reset">Reset</button></li>
-    <li><button data-filter="picto-none">Picto</button></li>
-    <li><button data-filter="none">None</button></li>
-    <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
-    <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
-    <li><button data-filter="picto-include-park-restaurant">Only Park and Restaurant + picto</button></li>
-    <li><button data-filter="include-catering">Only Catering</button></li>
-    <li><button data-filter="exclude-catering">No Catering</button></li>
-    <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
-  </ul>
+    <script type="text/javascript">
+      const map = new mapboxgl.Map({
+        container: document.querySelector('.map'),
+        style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
+        center: [-1.559646, 43.482489],
+        zoom: 16.54,
+        maxZoom: 20,
+        hash: true,
+      });
 
-  <script type="text/javascript">
-    const map = new mapboxgl.Map({
-      container: document.querySelector('.map'),
-      style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
-      center: [-1.559646, 43.482489],
-      zoom: 16.54,
-      maxZoom: 20,
-      hash: true,
-    });
+      const poiFilter = new teritorio.PoiFilter();
+      map.addControl(poiFilter);
 
-    const poiFilter = new teritorio.PoiFilter();
-    map.addControl(poiFilter);
+      document.querySelector('.top-buttons').addEventListener('click', function(event) {
+        event.stopPropagation();
 
-    document.querySelector('.top-buttons').addEventListener('click', function(event) {
-      event.stopPropagation();
+        const picto = event.target.dataset.filter.startsWith('picto');
 
-      const picto = event.target.dataset.filter.startsWith('picto');
-
-      if (event.target.dataset.filter.endsWith('include-catering')) {
-        poiFilter.setIncludeFilter([
-          ['catering']
-        ], picto);
-      } else if (event.target.dataset.filter.endsWith('exclude-catering')) {
-        poiFilter.setExcludeFilter([
-          ['catering']
-        ], picto);
-      } else if (event.target.dataset.filter.endsWith('include-park-restaurant')) {
-        poiFilter.setIncludeFilter(
-          [
-            ['catering', 'food', 'restaurant'],
-            ['leisure', 'park'],
-          ],
-          picto,
-        );
-      } else if (event.target.dataset.filter.endsWith('none')) {
-        poiFilter.remove(picto);
-      } else if (event.target.dataset.filter == 'reset') {
-        poiFilter.reset();
-      }
-    });
-  </script>
-</body>
-
+        if (event.target.dataset.filter.endsWith('include-catering')) {
+          poiFilter.setIncludeFilter([['catering']], picto);
+        } else if (event.target.dataset.filter.endsWith('exclude-catering')) {
+          poiFilter.setExcludeFilter([['catering']], picto);
+        } else if (event.target.dataset.filter.endsWith('include-park-restaurant')) {
+          poiFilter.setIncludeFilter(
+            [
+              ['catering', 'food', 'restaurant'],
+              ['leisure', 'park'],
+            ],
+            picto,
+          );
+        } else if (event.target.dataset.filter.endsWith('none')) {
+          poiFilter.remove(picto);
+        } else if (event.target.dataset.filter == 'reset') {
+          poiFilter.reset();
+        }
+      });
+    </script>
+  </body>
 </html>

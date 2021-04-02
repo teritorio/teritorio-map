@@ -1,49 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Switch buildings in 3D</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-<head>
-  <meta charset="utf-8" />
-  <title>Switch buildings in 3D</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
 
-  <link href="../styles.css" rel="stylesheet" />
-</head>
+  <body>
+    <div class="map"></div>
 
-<body>
-  <div class="map"></div>
+    <ul class="top-buttons">
+      <li><button data-building3d="false">Flat</button></li>
+      <li><button data-building3d="true">3D</button></li>
+    </ul>
 
-  <ul class="top-buttons">
-    <li><button data-building3d="false">Flat</button></li>
-    <li><button data-building3d="true">3D</button></li>
-  </ul>
+    <script type="text/javascript">
+      const map = new mapboxgl.Map({
+        container: document.querySelector('.map'),
+        style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
+        center: [-1.559646, 43.482489],
+        zoom: 16.54,
+        maxZoom: 20,
+        hash: true,
+      });
 
-  <script type="text/javascript">
-    const map = new mapboxgl.Map({
-      container: document.querySelector('.map'),
-      style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
-      center: [-1.559646, 43.482489],
-      zoom: 16.54,
-      maxZoom: 20,
-      hash: true,
-    });
+      const building3d = new teritorio.Building3d({
+        building3d: true,
+      });
+      map.addControl(building3d);
 
-    const building3d = new teritorio.Building3d({
-      building3d: true,
-    });
-    map.addControl(building3d);
+      document.querySelector('.top-buttons').addEventListener('click', function(event) {
+        event.stopPropagation();
 
-    document.querySelector('.top-buttons').addEventListener('click', function(event) {
-      event.stopPropagation();
-
-      if (event.target.dataset.building3d) {
-        building3d.set3d(event.target.dataset.building3d === 'true');
-      }
-    });
-  </script>
-</body>
-
+        if (event.target.dataset.building3d) {
+          building3d.set3d(event.target.dataset.building3d === 'true');
+        }
+      });
+    </script>
+  </body>
 </html>

@@ -1,44 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Change a map's boundaries</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-<head>
-  <meta charset="utf-8" />
-  <title>Change a map's boundaries</title>
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
-  <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+    <link href="../styles.css" rel="stylesheet" />
+  </head>
 
-  <link href="../styles.css" rel="stylesheet" />
-</head>
+  <body>
+    <div class="map"></div>
 
-<body>
-  <div class="map"></div>
+    <ul class="top-buttons">
+      <li><button>Default</button></li>
+      <li><button data-border="ma">Morocco</button></li>
+      <li><button data-border="eh">Western Sahara</button></li>
+      <li><button data-border="rs">Serbia</button></li>
+      <li><button data-border="xk">Kosovo</button></li>
+      <li><button data-border="ru">Russia</button></li>
+      <li><button data-border="ua">Ukraine</button></li>
+      <li><button data-border="cn">China</button></li>
+      <li><button data-border="in">India</button></li>
+      <li><button data-border="pk">Pakistan</button></li>
+      <li><button data-border="bt">Bhutan</button></li>
+      <li><button data-border="sd">Sudan</button></li>
+      <li><button data-border="ss">South Sudan</button></li>
+    </ul>
 
-  <ul class="top-buttons">
-    <li><button>Default</button></li>
-    <li><button data-border="ma">Morocco</button></li>
-    <li><button data-border="eh">Western Sahara</button></li>
-    <li><button data-border="rs">Serbia</button></li>
-    <li><button data-border="xk">Kosovo</button></li>
-    <li><button data-border="ru">Russia</button></li>
-    <li><button data-border="ua">Ukraine</button></li>
-    <li><button data-border="cn">China</button></li>
-    <li><button data-border="in">India</button></li>
-    <li><button data-border="pk">Pakistan</button></li>
-    <li><button data-border="bt">Bhutan</button></li>
-    <li><button data-border="sd">Sudan</button></li>
-    <li><button data-border="ss">South Sudan</button></li>
-  </ul>
-
-  <div class="explanation">
-    <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
-    <p>Boundaries exclusively from OpenStreetMap.</p>
-    <p>Last data update 2019-08-23.</p>
-    <p>
-      Build with
-      <a href="https://github.com/frodrigo/osmborder/tree/disputed_claim" target="_blank" rel="noopener noreferrer">modifier osmborder</a
+    <div class="explanation">
+      <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
+      <p>Boundaries exclusively from OpenStreetMap.</p>
+      <p>Last data update 2019-08-23.</p>
+      <p>
+        Build with
+        <a
+          href="https://github.com/frodrigo/osmborder/tree/disputed_claim"
+          target="_blank"
+          rel="noopener noreferrer"
+          >modifier osmborder</a
         >
         and modified OpenMapTiles.
       </p>
