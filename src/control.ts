@@ -2,7 +2,7 @@ import mapboxgl from 'mapbox-gl';
 
 export class Control {
   protected _map?: mapboxgl.Map;
-  protected _container: any;
+  protected _container?: HTMLDivElement;
   private _initialUpdateBind: () => void;
 
   constructor() {
