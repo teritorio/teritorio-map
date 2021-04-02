@@ -1,7 +1,7 @@
-import { building3d } from '../src';
+import { Building3d } from '../src';
 
-describe('building3d', () => {
+describe('Building3d', () => {
   test('is exported', () => {
-    expect(building3d).toBeTruthy();
+    expect(Building3d).toBeTruthy();
   });
 });

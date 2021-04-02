@@ -1,4 +1,4 @@
-export { border } from './border';
-export { language } from './language';
-export { building3d } from './building3d';
+export { Border } from './border';
+export { Language } from './language';
+export { Building3d } from './building3d';
 export { PoiFilter } from './poiFilter';

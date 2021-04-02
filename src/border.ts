@@ -1,4 +1,5 @@
 import mapboxgl from 'mapbox-gl';
+import { Control } from './control';
 
 enum Country {
   ma = 'ma',
@@ -32,7 +33,7 @@ const countryCodes: { [key in Country]: number } = {
 
 interface Options {
   /* Default country border to display */
-  defaultCountry?: Country;
+  country?: Country;
 }
 
 let isInitialized = false;
@@ -40,23 +41,38 @@ let isInitialized = false;
 /**
  * Select and switch borders point of view according to different countries definition.
  */
-export function border(map: mapboxgl.Map, options?: Options) {
-  init(map);
+export class Border extends Control {
+  private _options?: Options;
 
-  if (options?.defaultCountry) {
-    setBorder(map, options.defaultCountry);
-  } else {
-    resetBorder(map);
+  constructor(options?: Options) {
+    super();
+    this._options = options;
   }
 
-  return {
-    resetBorder() {
-      resetBorder(map);
-    },
-    setBorder(country: Country) {
-      setBorder(map, country);
-    },
-  };
+  protected _initialUpdate() {
+    super._initialUpdate();
+    if (this._map) {
+      init(this._map);
+
+      if (this._options?.country) {
+        setBorder(this._map, this._options.country);
+      } else {
+        resetBorder(this._map);
+      }
+    }
+  }
+
+  resetBorder() {
+    if (this._map) {
+      resetBorder(this._map);
+    }
+  }
+
+  setBorder(country: Country) {
+    if (this._map) {
+      setBorder(this._map, country);
+    }
+  }
 }
 
 function resetBorder(map: mapboxgl.Map) {

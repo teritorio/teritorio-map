@@ -9,7 +9,7 @@
 
     <script src="https://cdn.klokantech.com/openmaptiles-language/v1.0/openmaptiles-language.js"></script>
 
-    <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
     <link href="../styles.css" rel="stylesheet" />
   </head>
@@ -27,12 +27,15 @@
     <script type="text/javascript">
       const map = new mapboxgl.Map({
         container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
         center: [-1.222, 43.184],
         zoom: 10,
       });
 
-      const language = teritorio.language(map);
+      const language = new teritorio.Language({
+        language: 'es',
+      });
+      map.addControl(language);
 
       document.querySelector('.top-buttons').addEventListener('click', function(event) {
         event.stopPropagation();

@@ -1,8 +1,8 @@
-import mapboxgl from 'mapbox-gl';
+import { Control } from './control';
 
 interface Options {
   /* Default language to set (if not set, the browser language is used) */
-  defaultLanguage?: string;
+  language?: string;
 }
 
 /**
@@ -11,22 +11,35 @@ interface Options {
  *
  * Requirement: https://github.com/klokantech/openmaptiles-language/
  */
-export function language(map: mapboxgl.Map, options?: Options) {
-  if (!map.autodetectLanguage || !map.setLanguage) {
-    throw new Error(
-      `language() depends on https://github.com/klokantech/openmaptiles-language but it can't be found...`,
-    );
+export class Language extends Control {
+  private _options?: Options;
+
+  constructor(options?: Options) {
+    super();
+    this._options = options;
   }
 
-  map.autodetectLanguage();
+  protected _initialUpdate() {
+    super._initialUpdate();
 
-  if (options?.defaultLanguage) {
-    map.setLanguage(options.defaultLanguage);
+    if (this._map) {
+      if (!this._map.autodetectLanguage || !this._map.setLanguage) {
+        throw new Error(
+          `language() depends on https://github.com/klokantech/openmaptiles-language but it can't be found...`,
+        );
+      }
+
+      this._map.autodetectLanguage();
+
+      if (this._options?.language) {
+        this._map.setLanguage(this._options.language);
+      }
+    }
   }
 
-  return {
-    setLanguage(language: string) {
-      map.setLanguage(language);
-    },
-  };
+  setLanguage(language: string) {
+    if (this._map) {
+      this._map.setLanguage(language);
+    }
+  }
 }

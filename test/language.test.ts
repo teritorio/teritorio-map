@@ -1,7 +1,7 @@
-import { language } from '../src';
+import { Language } from '../src';
 
-describe('language', () => {
+describe('Language', () => {
   test('is exported', () => {
-    expect(language).toBeTruthy();
+    expect(Language).toBeTruthy();
   });
 });

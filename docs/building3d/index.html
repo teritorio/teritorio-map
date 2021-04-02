@@ -7,7 +7,7 @@
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.js"></script>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map@0.7.0/dist/teritorio.umd.production.min.js"></script>
+    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
     <link href="../styles.css" rel="stylesheet" />
   </head>
@@ -16,30 +16,31 @@
     <div class="map"></div>
 
     <ul class="top-buttons">
-      <li><button data-is3d="false">Flat</button></li>
-      <li><button data-is3d="true">3D</button></li>
+      <li><button data-building3d="false">Flat</button></li>
+      <li><button data-building3d="true">3D</button></li>
     </ul>
 
     <script type="text/javascript">
       const map = new mapboxgl.Map({
         container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-0.9/style.json',
+        style: 'https://vecto-dev.teritorio.xyz/styles/teritorio-tourism-dev/style.json',
         center: [-1.559646, 43.482489],
         zoom: 16.54,
         maxZoom: 20,
         hash: true,
       });
 
-      map.on('load', function() {
-        const building = teritorio.building3d(map);
+      const building3d = new teritorio.Building3d({
+        building3d: true,
+      });
+      map.addControl(building3d);
 
-        document.querySelector('.top-buttons').addEventListener('click', function(event) {
-          event.stopPropagation();
+      document.querySelector('.top-buttons').addEventListener('click', function(event) {
+        event.stopPropagation();
 
-          if (event.target.dataset.is3d) {
-            building.set3d(event.target.dataset.is3d === 'true');
-          }
-        });
+        if (event.target.dataset.building3d) {
+          building3d.set3d(event.target.dataset.building3d === 'true');
+        }
       });
     </script>
   </body>
