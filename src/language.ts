@@ -32,7 +32,7 @@ export class Language extends Control {
       this._map.autodetectLanguage();
 
       if (this._options?.language) {
-        this._map.setLanguage(this._options.language);
+        this.setLanguage(this._options.language);
       }
     }
   }
