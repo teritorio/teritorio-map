@@ -1,4 +1,3 @@
-import mapboxgl from 'mapbox-gl';
 import { Control } from './control';
 
 interface Options {
@@ -19,34 +18,30 @@ export class Building3d extends Control {
 
   protected _initialUpdate() {
     super._initialUpdate();
-    if (this._map && this._options?.building3d) {
-      set3d(this._map, this._options.building3d, this._options?.pitch);
+    if (this._options?.building3d) {
+      this.set3d(this._options.building3d, this._options?.pitch);
     }
   }
 
-  set3d(building3d: boolean, pitch: number) {
+  set3d(building3d: boolean, pitch: number = 60) {
     if (this._map) {
-      set3d(this._map, building3d, pitch);
+      if (building3d) {
+        // Make it 3D
+        if (typeof pitch !== 'undefined') {
+          this._map.easeTo({ pitch, duration: 500 });
+        }
+
+        this._map.setLayoutProperty('building-3d', 'visibility', 'visible');
+        this._map.setLayoutProperty('building', 'visibility', 'none');
+        this._map.setLayoutProperty('building-top', 'visibility', 'none');
+      } else {
+        // Make it flat
+        this._map.easeTo({ pitch: 0, duration: 500 });
+
+        this._map.setLayoutProperty('building', 'visibility', 'visible');
+        this._map.setLayoutProperty('building-top', 'visibility', 'visible');
+        this._map.setLayoutProperty('building-3d', 'visibility', 'none');
+      }
     }
-  }
-}
-
-function set3d(map: mapboxgl.Map, building3d: boolean, pitch: number = 60) {
-  if (building3d) {
-    // Make it 3D
-    if (typeof pitch !== 'undefined') {
-      map.easeTo({ pitch, duration: 500 });
-    }
-
-    map.setLayoutProperty('building-3d', 'visibility', 'visible');
-    map.setLayoutProperty('building', 'visibility', 'none');
-    map.setLayoutProperty('building-top', 'visibility', 'none');
-  } else {
-    // Make it flat
-    map.easeTo({ pitch: 0, duration: 500 });
-
-    map.setLayoutProperty('building', 'visibility', 'visible');
-    map.setLayoutProperty('building-top', 'visibility', 'visible');
-    map.setLayoutProperty('building-3d', 'visibility', 'none');
   }
 }
