@@ -39,7 +39,10 @@
         event.stopPropagation();
 
         if (event.target.dataset.building3d) {
-          building3d.set3d(event.target.dataset.building3d === 'true');
+          const is3d = event.target.dataset.building3d === 'true';
+          const pitch = is3d ? 60 : 0;
+
+          building3d.set3d(is3d, pitch);
         }
       });
     </script>

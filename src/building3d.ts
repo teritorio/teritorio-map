@@ -23,7 +23,7 @@ export class Building3d extends Control {
     }
   }
 
-  set3d(building3d: boolean, pitch: number = 60) {
+  set3d(building3d: boolean, pitch?: number) {
     if (this._map) {
       if (building3d) {
         // Make it 3D
