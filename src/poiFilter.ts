@@ -1,11 +1,15 @@
 import mapboxgl from 'mapbox-gl';
 import { Control } from './control';
 
+type PoisFilter = string[]
+type PoisFilters = PoisFilter[]
+
 interface Options {
-  filter?: MapboxExpr;
+  filter?: PoisFilters;
   include?: boolean;
   picto?: boolean;
 }
+
 
 export class PoiFilter extends Control {
   private _options?: Options;
@@ -22,13 +26,13 @@ export class PoiFilter extends Control {
     }
   }
 
-  setExcludeFilter(filter: MapboxExpr, picto: boolean = true) {
+  setExcludeFilter(filter: PoisFilters, picto: boolean = true) {
     if (this._map) {
       applyFilter(this._map, filter, false, picto);
     }
   }
 
-  setIncludeFilter(filter: MapboxExpr, picto: boolean = true) {
+  setIncludeFilter(filter: PoisFilters, picto: boolean = true) {
     if (this._map) {
       applyFilter(this._map, filter, true, picto);
     }
@@ -51,7 +55,7 @@ export class PoiFilter extends Control {
 
 function applyFilter(
   map: mapboxgl.Map,
-  filter: MapboxExpr,
+  filter: PoisFilters,
   include: boolean = true,
   picto: boolean = true,
 ) {
@@ -84,13 +88,13 @@ const poiLayers = [
 
 const filterId: MapboxExpr = ['let', '_bloc_name', 'poiFilter'];
 
-function formatExpressionLiterals(filters: MapboxExpr, filterLength: number) {
+function formatExpressionLiterals(filters: PoisFilters, filterLength: number) {
   return filters
-    .filter((f): f is MapboxExpr => Array.isArray(f) && f.length === filterLength)
+    .filter((f): f is PoisFilter => Array.isArray(f) && f.length === filterLength)
     .map(f => (filterLength === 1 ? f[0] : f.join('|')));
 }
 
-function createFilterExpression(filter: MapboxExpr) {
+function createFilterExpression(filter: PoisFilters) {
   const f1 = formatExpressionLiterals(filter, 1);
   const f2 = formatExpressionLiterals(filter, 2);
   const f3 = formatExpressionLiterals(filter, 3);
@@ -138,7 +142,7 @@ function pruneHideFilter(filter: MapboxExpr) {
   );
 }
 
-function applyHideFilter(map: mapboxgl.Map, filter: MapboxExpr, include: boolean = true) {
+function applyHideFilter(map: mapboxgl.Map, filter: PoisFilters, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
@@ -216,7 +220,7 @@ function resetPictoLayout(expr: MapboxExpr) {
   return expr;
 }
 
-function applyPictoLayout(map: mapboxgl.Map, filter: MapboxExpr, include: boolean = true) {
+function applyPictoLayout(map: mapboxgl.Map, filter: PoisFilters, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
