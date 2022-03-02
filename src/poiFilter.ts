@@ -1,4 +1,4 @@
-import mapboxgl from 'mapbox-gl';
+import maplibregl from 'mapbox-gl';
 import { Control } from './control';
 
 type PoisFilter = string[]
@@ -54,7 +54,7 @@ export class PoiFilter extends Control {
 // Redirection function
 
 function applyFilter(
-  map: mapboxgl.Map,
+  map: maplibregl.Map,
   filter: PoisFilters,
   include: boolean = true,
   picto: boolean = true,
@@ -72,7 +72,7 @@ function applyFilter(
   }
 }
 
-function unsetFilter(map: mapboxgl.Map) {
+function unsetFilter(map: maplibregl.Map) {
   unsetHideFilter(map);
   unsetPictoLayout(map);
 }
@@ -142,7 +142,7 @@ function pruneHideFilter(filter: MapboxExpr): MapboxExpr | undefined {
   );
 }
 
-function applyHideFilter(map: mapboxgl.Map, filter: PoisFilters, include: boolean = true) {
+function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
@@ -163,7 +163,7 @@ function applyHideFilter(map: mapboxgl.Map, filter: PoisFilters, include: boolea
   });
 }
 
-function unsetHideFilter(map: mapboxgl.Map) {
+function unsetHideFilter(map: maplibregl.Map) {
   poiLayers.forEach(layerId => {
     const styleFilter = pruneHideFilter(map.getFilter(layerId));
 
@@ -220,7 +220,7 @@ function resetPictoLayout(expr: MapboxExpr): MapboxExpr | undefined {
   return expr;
 }
 
-function applyPictoLayout(map: mapboxgl.Map, filter: PoisFilters, include: boolean = true) {
+function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
   let expression: MapboxExpr;
 
   if (include) {
@@ -244,7 +244,7 @@ function applyPictoLayout(map: mapboxgl.Map, filter: PoisFilters, include: boole
   });
 }
 
-function unsetPictoLayout(map: mapboxgl.Map) {
+function unsetPictoLayout(map: maplibregl.Map) {
   poiLayers.forEach(layerId => {
     const layout = resetPictoLayout(map.getLayoutProperty(layerId, 'icon-image'));
 
