@@ -5,10 +5,12 @@ Collection of helper functions to add some features to Mapbox GL JS related to T
 ## Display
 
 - [border](https://teritorio.github.io/teritorio-map/border): Select and switch borders point of view according to different countries definition.
-- [language](https://teritorio.github.io/teritorio-map/language): Select and switch the map display language, either by auto-detection of the browser language or manual setting.
 - [building3d](https://teritorio.github.io/teritorio-map/building3d): Select and switch the way to display building in 3D or not.
 - [poiFilter](https://teritorio.github.io/teritorio-map/poiFilter/index-initial-settings.html): Set initial display of POIs by thematic.
 - [poiFilter](https://teritorio.github.io/teritorio-map/poiFilter/index-change.html): Change display of POIs by thematic.
+
+For languages switch use [ openmaptiles-gl-language
+](https://github.com/teritorio/openmaptiles-gl-language).
 
 ## Usage
 
@@ -28,7 +30,6 @@ To use in your HTML files:
 
 <script type="text/javascript">
   teritorio.icon(/* ... */);
-  teritorio.language(/* ... */);
 </script>
 ```
 
@@ -37,27 +38,24 @@ To use in your HTML files:
 To import the library in your bundled project:
 
 ```js
-import { icon, language } from '@teritorio/map';
+import { icon } from '@teritorio/map';
 
 icon(/* ... */);
-language(/* ... */);
 ```
 
 ### ES Module
 
 ```html
 <script type="module">
-  import { icon, language } from 'https://unpkg.com/@teritorio/map/dist/teritorio.esm.js';
+  import { icon } from 'https://unpkg.com/@teritorio/map/dist/teritorio.esm.js';
 
   icon(/* ... */);
-  language(/* ... */);
 </script>
 ```
 
 ## Requirements
 
 - <https://github.com/mapbox/mapbox-gl-js> (>= v1.10.1)
-- <https://github.com/klokantech/openmaptiles-language> (only for the `language` feature)
 
 ## Contribution
 
