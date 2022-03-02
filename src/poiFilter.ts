@@ -147,9 +147,11 @@ function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: bool
   let expression: FilterSpecification;
 
   if (include) {
-    expression = filterId.concat([createFilterExpression(filter)]);
+    // @ts-ignore
+    expression = [...filterId, createFilterExpression(filter)];
   } else {
-    expression = filterId.concat([['!', createFilterExpression(filter)]]);
+    // @ts-ignore
+    expression = [...filterId, ['!', createFilterExpression(filter)]];
   }
 
   poiLayers.forEach(layerId => {
@@ -158,6 +160,7 @@ function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: bool
     if (!styleFilter) {
       console.warn(`Cannot amend filter of layer "${layerId}"`);
     } else {
+      // @ts-ignore
       styleFilter.push(expression);
       map.setFilter(layerId, styleFilter);
     }
@@ -225,9 +228,11 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
   let expression: FilterSpecification;
 
   if (include) {
-    expression = filterId.concat([['!', createFilterExpression(filter)]]);
+    // @ts-ignore
+    expression = [...filterId, ['!', createFilterExpression(filter)]];
   } else {
-    expression = filterId.concat([createFilterExpression(filter)]);
+    // @ts-ignore
+    expression = [...filterId, createFilterExpression(filter)];
   }
 
   poiLayers.forEach(layerId => {

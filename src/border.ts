@@ -103,9 +103,12 @@ export class Border extends Control {
   setBorder(country: Country) {
     if (this._map) {
       this._map.setFilter('boundary-land-level-2', [
+        // @ts-ignore
         'all',
         ['==', ['to-number', ['get', 'admin_level']], 2],
+        // @ts-ignore
         ['!=', ['to-number', ['get', 'maritime']], 1],
+        // @ts-ignore
         [
           'any',
           [
