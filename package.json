@@ -21,9 +21,9 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@types/mapbox-gl": "1.13.0",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
+    "maplibre-gl": "2.0.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^4.2.3"

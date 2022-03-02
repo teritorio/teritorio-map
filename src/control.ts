@@ -1,6 +1,4 @@
-import maplibregl from 'mapbox-gl';
-
-export class Control {
+export class Control implements maplibregl.IControl {
   protected _map?: maplibregl.Map;
   protected _container?: HTMLDivElement;
   private _initialUpdateBind: () => void;
