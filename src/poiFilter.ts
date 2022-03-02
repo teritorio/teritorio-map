@@ -88,13 +88,13 @@ const poiLayers = [
 
 const filterId: MapboxExpr = ['let', '_bloc_name', 'poiFilter'];
 
-function formatExpressionLiterals(filters: PoisFilters, filterLength: number) {
+function formatExpressionLiterals(filters: PoisFilters, filterLength: number): string[] {
   return filters
     .filter((f): f is PoisFilter => Array.isArray(f) && f.length === filterLength)
     .map(f => (filterLength === 1 ? f[0] : f.join('|')));
 }
 
-function createFilterExpression(filter: PoisFilters) {
+function createFilterExpression(filter: PoisFilters): MapboxExpr {
   const f1 = formatExpressionLiterals(filter, 1);
   const f2 = formatExpressionLiterals(filter, 2);
   const f3 = formatExpressionLiterals(filter, 3);
@@ -125,7 +125,7 @@ function createFilterExpression(filter: PoisFilters) {
 
 // Hide POI
 
-function pruneHideFilter(filter: MapboxExpr) {
+function pruneHideFilter(filter: MapboxExpr): MapboxExpr | undefined {
   if (!filter || filter[0] !== 'all') {
     return undefined;
   }
@@ -180,7 +180,7 @@ function unsetHideFilter(map: mapboxgl.Map) {
 const filterPictoId: MapboxExpr = ['let', '_bloc_name', 'styleFilter'];
 const defaultStyle: MapboxExpr = ['get', 'style'];
 
-function ammendPictoFilter(filter: MapboxExpr, styleExpression: MapboxExpr) {
+function ammendPictoFilter(filter: MapboxExpr, styleExpression: MapboxExpr): MapboxExpr | undefined {
   if (!filter || filter[0] !== 'all') {
     return undefined;
   }
@@ -201,7 +201,7 @@ function ammendPictoFilter(filter: MapboxExpr, styleExpression: MapboxExpr) {
   return filter;
 }
 
-function resetPictoLayout(expr: MapboxExpr) {
+function resetPictoLayout(expr: MapboxExpr): MapboxExpr | undefined {
   if (!expr || !expr[4]) {
     return undefined;
   }
