@@ -60,7 +60,7 @@ export class Border extends Control {
             'line-color': 'hsl(248, 7%, 70%)',
             'line-dasharray': [1, 3],
             'line-width': {
-              base: 1,
+              type: 'interval',
               stops: [
                 [0, 0.6],
                 [4, 1.4],
