@@ -1,16 +1,15 @@
-import { FilterSpecification }  from 'maplibre-gl';
+import { FilterSpecification } from 'maplibre-gl';
 
 import { Control } from './control';
 
-type PoisFilter = string[]
-type PoisFilters = PoisFilter[]
+type PoisFilter = string[];
+type PoisFilters = PoisFilter[];
 
 interface Options {
   filter?: PoisFilters;
   include?: boolean;
   picto?: boolean;
 }
-
 
 export class PoiFilter extends Control {
   private _options?: Options;
@@ -184,7 +183,10 @@ function unsetHideFilter(map: maplibregl.Map) {
 const filterPictoId: FilterSpecification = ['let', '_bloc_name', 'styleFilter'];
 const defaultStyle: FilterSpecification = ['get', 'style'];
 
-function ammendPictoFilter(filter: FilterSpecification | void, styleExpression: FilterSpecification): FilterSpecification | void {
+function ammendPictoFilter(
+  filter: FilterSpecification | void,
+  styleExpression: FilterSpecification,
+): FilterSpecification | void {
   if (!filter || filter[0] !== 'all') {
     return;
   }
