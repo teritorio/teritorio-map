@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Teritorio - Démonstration cartographie</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src='https://unpkg.com/maplibre-gl@2.1.7/dist/maplibre-gl.js'></script>
+  <link href='https://unpkg.com/maplibre-gl@2.1.7/dist/maplibre-gl.css' rel='stylesheet' />
+
+  <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
+  <script
+    src="https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.umd.production.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-size: 16px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .map {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .top-buttons {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+
+      margin: 0;
+      padding: 1rem;
+      padding-right: 3em;
+    }
+
+    .top-buttons>li {
+      width: 20%;
+      min-width: max-content;
+      margin: 0;
+      padding: 0.5rem;
+      list-style-type: none;
+    }
+
+    .top-buttons>li>button {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.2rem;
+      box-shadow: none;
+      color: #fff;
+      font-size: 0.8rem;
+      line-height: 1.2rem;
+      font-family: sans-serif;
+      font-weight: bold;
+    }
+
+    .top-buttons>li>button:hover,
+    .top-buttons>li>button:focus,
+    .top-buttons>li>button:active {
+      box-shadow: 0 0 0 2px #0f395e44;
+      cursor: pointer;
+    }
+
+    .color-icon {
+      background: #b8941c;
+    }
+
+    .color-map {
+      background: #1cb858;
+    }
+
+    .color-lang {
+      background: #9e1cb8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="map"></div>
+
+  <ul class="top-buttons">
+    <li><button class="color-icon" data-filter="reset">Style Tourisme</button></li>
+    <li><button class="color-icon" data-filter="picto-none">Basique</button></li>
+    <li><button class="color-icon" data-filter="picto-include-catering">Restauration</button></li>
+    <li><button class="color-map" data-filter="reset-satellite">Satellite</button></li>
+    <li><button class="color-map" data-filter="reset-3d">3D</button></li>
+    <li><button class="color-lang" data-filter="lang-fr">En français</button></li>
+    <li><button class="color-lang" data-filter="lang-en">In English</button></li>
+    <li><button class="color-lang" data-filter="lang-es">En español</button></li>
+  </ul>
+
+  <script type="text/javascript">
+    const styleTourisme = 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i';
+    const styleSatellite = 'https://vecto.teritorio.xyz/styles/satellite-hybrid/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i';
+    let lastStyle = styleTourisme;
+    const map = new maplibregl.Map({
+      container: document.querySelector('.map'),
+      style: lastStyle,
+      center: [-1.588654, 43.439148],
+      zoom: 16,
+      maxZoom: 20,
+      hash: true,
+    });
+    map.addControl(new maplibregl.NavigationControl());
+
+    const poiFilter = new teritorio.PoiFilter();
+    map.addControl(poiFilter);
+
+    const building3d = new teritorio.Building3d({
+      building3d: false,
+    });
+    map.addControl(building3d);
+
+    var language = new openmaptiles_gl_language.OpenMapTilesLanguage({
+      defaultLanguage: 'fr'
+    });
+    map.addControl(language);
+
+    document.querySelector('.top-buttons').addEventListener('click', function (event) {
+      event.stopPropagation();
+
+      const effect = () => {
+        if (event.target.dataset.filter.endsWith('include-catering')) {
+          poiFilter.setIncludeFilter([['catering']]);
+        } else if (event.target.dataset.filter.endsWith('none')) {
+          poiFilter.remove();
+        } else if (event.target.dataset.filter.startsWith('reset')) {
+          poiFilter.reset();
+        }
+
+        if (event.target.dataset.filter.endsWith('3d')) {
+          building3d.set3d(true, 60);
+        } else {
+          building3d.set3d(false, 0);
+        }
+
+        if (event.target.dataset.filter.startsWith('lang')) {
+          const lang = event.target.dataset.filter.substring(5, 7);
+          language.setLanguage(lang);
+        }
+      }
+
+      if (event.target.dataset.filter.endsWith('satellite')) {
+        if (lastStyle != styleSatellite) {
+          lastStyle = styleSatellite
+          map.setStyle(lastStyle);
+          map.once('style', (event) => {
+            if (event.dataType == 'style') {
+              effect();
+            }
+          });
+        }
+      } else {
+        if (lastStyle != styleTourisme) {
+          lastStyle = styleTourisme
+          map.setStyle(lastStyle);
+          map.once('style', (event) => {
+            if (event.dataType == 'style') {
+              effect();
+            }
+          });
+        } else {
+          effect();
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>
