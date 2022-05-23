@@ -153,29 +153,33 @@ function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: bool
     expression = [...filterId, ['!', createFilterExpression(filter)]];
   }
 
-  poiLayers.forEach(layerId => {
-    const styleFilter = pruneHideFilter(map.getFilter(layerId));
+  poiLayers
+    .filter(layerId => map.getLayer(layerId))
+    .forEach(layerId => {
+      const styleFilter = pruneHideFilter(map.getFilter(layerId));
 
-    if (!styleFilter) {
-      console.warn(`Cannot amend filter of layer "${layerId}"`);
-    } else {
-      // @ts-ignore
-      styleFilter.push(expression);
-      map.setFilter(layerId, styleFilter);
-    }
-  });
+      if (!styleFilter) {
+        console.warn(`Cannot amend filter of layer "${layerId}"`);
+      } else {
+        // @ts-ignore
+        styleFilter.push(expression);
+        map.setFilter(layerId, styleFilter);
+      }
+    });
 }
 
 function unsetHideFilter(map: maplibregl.Map) {
-  poiLayers.forEach(layerId => {
-    const styleFilter = pruneHideFilter(map.getFilter(layerId));
+  poiLayers
+    .filter(layerId => map.getLayer(layerId))
+    .forEach(layerId => {
+      const styleFilter = pruneHideFilter(map.getFilter(layerId));
 
-    if (!styleFilter) {
-      console.warn(`Cannot amend filter of layer "${layerId}"`);
-    } else {
-      map.setFilter(layerId, styleFilter);
-    }
-  });
+      if (!styleFilter) {
+        console.warn(`Cannot amend filter of layer "${layerId}"`);
+      } else {
+        map.setFilter(layerId, styleFilter);
+      }
+    });
 }
 
 // Switch to picto
@@ -237,31 +241,35 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
     expression = [...filterId, createFilterExpression(filter)];
   }
 
-  poiLayers.forEach(layerId => {
-    const layout = map.getLayoutProperty(layerId, 'icon-image');
-    const styleExpression = ['case', expression, '•', defaultStyle];
+  poiLayers
+    .filter(layerId => map.getLayer(layerId))
+    .forEach(layerId => {
+      const layout = map.getLayoutProperty(layerId, 'icon-image');
+      const styleExpression = ['case', expression, '•', defaultStyle];
 
-    if (!layout) {
-      console.warn(`Cannot amend filter of layer "${layerId}"`);
-    } else {
-      layout[4] = styleExpression;
-      map.setLayoutProperty(layerId, 'icon-image', layout);
-    }
+      if (!layout) {
+        console.warn(`Cannot amend filter of layer "${layerId}"`);
+      } else {
+        layout[4] = styleExpression;
+        map.setLayoutProperty(layerId, 'icon-image', layout);
+      }
 
-    map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), styleExpression) || null);
-  });
+      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), styleExpression) || null);
+    });
 }
 
 function unsetPictoLayout(map: maplibregl.Map) {
-  poiLayers.forEach(layerId => {
-    const layout = resetPictoLayout(map.getLayoutProperty(layerId, 'icon-image'));
+  poiLayers
+    .filter(layerId => map.getLayer(layerId))
+    .forEach(layerId => {
+      const layout = resetPictoLayout(map.getLayoutProperty(layerId, 'icon-image'));
 
-    if (!layout) {
-      console.warn(`Cannot amend layout of layer "${layerId}"`);
-    } else {
-      map.setLayoutProperty(layerId, 'icon-image', layout);
-    }
+      if (!layout) {
+        console.warn(`Cannot amend layout of layer "${layerId}"`);
+      } else {
+        map.setLayoutProperty(layerId, 'icon-image', layout);
+      }
 
-    map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), defaultStyle) || null);
-  });
+      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), defaultStyle) || null);
+    });
 }
