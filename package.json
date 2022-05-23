@@ -12,12 +12,20 @@
   "engines": {
     "node": ">=10"
   },
+  "keywords": [
+    "mapbox",
+    "maplibre",
+    "teritorio",
+    "gis",
+    "vector",
+    "gl"
+  ],
   "scripts": {
-    "start": "tsdx watch --format cjs,esm,umd --name teritorio",
-    "build": "tsdx build --format cjs,esm,umd --name teritorio",
+    "start": "tsdx watch --format cjs,esm,umd --name teritorio-map",
+    "build": "tsdx build --format cjs,esm,umd --name teritorio-map",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build --format cjs,esm,umd --name teritorio"
+    "prepare": "tsdx build --format cjs,esm,umd --name teritorio-map"
   },
   "dependencies": {},
   "devDependencies": {
