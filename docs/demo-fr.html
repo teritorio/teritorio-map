@@ -74,6 +74,10 @@
       cursor: pointer;
     }
 
+    .color-style {
+      background: #b81c1c;
+    }
+
     .color-icon {
       background: #b8941c;
     }
@@ -92,10 +96,13 @@
   <div class="map"></div>
 
   <ul class="top-buttons">
-    <li><button class="color-icon" data-filter="reset">Style Tourisme</button></li>
+    <li><button class="color-style" data-filter="reset-tourisme">Style Tourisme</button></li>
+    <li><button class="color-style" data-filter="reset-city">Style Ville</button></li>
+    <li><button class="color-style" data-filter="reset-cycle">Style Vélo</button></li>
+    <li><button class="color-style" data-filter="reset-topo">Style Topo</button></li>
+    <li><button class="color-style" data-filter="reset-satellite">Satellite</button></li>
     <li><button class="color-icon" data-filter="picto-none">Basique</button></li>
     <li><button class="color-icon" data-filter="picto-include-catering">Restauration</button></li>
-    <li><button class="color-map" data-filter="reset-satellite">Satellite</button></li>
     <li><button class="color-map" data-filter="reset-3d">3D</button></li>
     <li><button class="color-lang" data-filter="lang-fr">En français</button></li>
     <li><button class="color-lang" data-filter="lang-en">In English</button></li>
@@ -105,12 +112,17 @@
   </ul>
 
   <script type="text/javascript">
-    const styleTourisme = 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i';
-    const styleSatellite = 'https://vecto.teritorio.xyz/styles/satellite-hybrid/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i';
-    let lastStyle = styleTourisme;
+    const styles = {
+      'tourisme': 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      'city': 'https://vecto.teritorio.xyz/styles/teritorio-city-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      'cycle': 'https://vecto.teritorio.xyz/styles/teritorio-bicycle-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      'topo': 'https://vecto.teritorio.xyz/styles/teritorio-topo/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      'satellite': 'https://vecto.teritorio.xyz/styles/satellite-hybrid/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+    };
+    let lastStyle = 'tourisme';
     const map = new maplibregl.Map({
       container: document.querySelector('.map'),
-      style: lastStyle,
+      style: styles[lastStyle],
       center: [-1.588654, 43.439148],
       zoom: 16,
       maxZoom: 20,
@@ -133,42 +145,46 @@
 
     document.querySelector('.top-buttons').addEventListener('click', function (event) {
       event.stopPropagation();
+      const targetStart = event.target.dataset.filter.split('-')[0];
+      const targetEnd = event.target.dataset.filter.split('-').pop();
 
       const effect = () => {
         if (event.target.dataset.filter.endsWith('include-catering')) {
           poiFilter.setIncludeFilter([['catering']]);
-        } else if (event.target.dataset.filter.endsWith('none')) {
+        } else if (targetEnd === 'none') {
           poiFilter.remove();
-        } else if (event.target.dataset.filter.startsWith('reset')) {
+        } else if (targetStart === 'reset') {
           poiFilter.reset();
         }
 
-        if (event.target.dataset.filter.endsWith('3d')) {
+        if (targetEnd === '3d') {
           building3d.set3d(true, 60);
         } else {
           building3d.set3d(false, 0);
         }
 
-        if (event.target.dataset.filter.startsWith('lang')) {
+        if (targetStart === 'lang') {
           const lang = event.target.dataset.filter.substring(5, 7);
           language.setLanguage(lang);
         }
       }
 
-      if (event.target.dataset.filter.endsWith('satellite')) {
-        if (lastStyle != styleSatellite) {
-          lastStyle = styleSatellite
-          map.setStyle(lastStyle);
+      if (Object.keys(styles).includes(targetEnd)) {
+        if (lastStyle != targetEnd) {
+          lastStyle = targetEnd;
+          map.setStyle(styles[lastStyle]);
           map.once('style', (event) => {
             if (event.dataType == 'style') {
               effect();
             }
           });
+        } else {
+          effect();
         }
       } else {
-        if (lastStyle != styleTourisme) {
-          lastStyle = styleTourisme
-          map.setStyle(lastStyle);
+        if (lastStyle != 'tourisme') {
+          lastStyle = 'tourisme';
+          map.setStyle(styles[lastStyle]);
           map.once('style', (event) => {
             if (event.dataType == 'style') {
               effect();
