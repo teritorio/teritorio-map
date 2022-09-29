@@ -1,7 +1,7 @@
-import { PoiFilter } from '../src';
+import { PoiFilter } from '../src'
 
 describe('PoiFilter', () => {
   test('is exported', () => {
-    expect(PoiFilter).toBeTruthy();
-  });
-});
+    expect(PoiFilter).toBeTruthy()
+  })
+})

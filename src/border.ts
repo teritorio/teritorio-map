@@ -1,4 +1,4 @@
-import { Control } from './control';
+import { Control } from './control'
 
 enum Country {
   ma = 'ma',
@@ -17,14 +17,14 @@ enum Country {
 
 interface Options {
   /* Default country border to display */
-  country?: Country;
+  country?: Country
 }
 
 /**
  * Select and switch borders point of view according to different countries definition.
  */
 export class Border extends Control {
-  private _options?: Options;
+  private _options?: Options
 
   protected countryCodes: { [key in Country]: number } = {
     ma: 0 ** 2,
@@ -39,11 +39,11 @@ export class Border extends Control {
     bt: 9 ** 2,
     sd: 10 ** 2,
     ss: 11 ** 2,
-  };
+  }
 
   constructor(options?: Options) {
-    super();
-    this._options = options;
+    super()
+    this._options = options
   }
 
   protected init() {
@@ -74,18 +74,18 @@ export class Border extends Control {
           type: 'line',
         },
         'boundary-land-level-2',
-      );
+      )
     }
   }
 
   protected _initialUpdate() {
-    super._initialUpdate();
-    this.init();
+    super._initialUpdate()
+    this.init()
 
     if (this._options?.country) {
-      this.setBorder(this._options.country);
+      this.setBorder(this._options.country)
     } else {
-      this.resetBorder();
+      this.resetBorder()
     }
   }
 
@@ -96,7 +96,7 @@ export class Border extends Control {
         ['==', 'admin_level', 2],
         ['!=', 'maritime', 1],
         ['==', 'neutral', 1],
-      ]);
+      ])
     }
   }
 
@@ -134,7 +134,7 @@ export class Border extends Control {
             1,
           ],
         ],
-      ]);
+      ])
     }
   }
 }
