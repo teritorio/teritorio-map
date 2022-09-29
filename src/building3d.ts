@@ -40,6 +40,8 @@ export class Building3d extends Control {
         if (this._map.getLayer('building-top')) {
           this._map.setLayoutProperty('building-top', 'visibility', 'none')
         }
+
+        this._map.setTerrain({ source: 'alti', exaggeration: 1.5 })
       } else {
         // Make it flat
         this._map.easeTo({ pitch: 0, duration: 500 })
@@ -53,6 +55,9 @@ export class Building3d extends Control {
         if (this._map.getLayer('building-3d')) {
           this._map.setLayoutProperty('building-3d', 'visibility', 'none')
         }
+
+        // @ts-ignore
+        this._map.setTerrain()
       }
     }
   }

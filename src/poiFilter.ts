@@ -125,8 +125,10 @@ function createFilterExpression(filter: PoisFilters): ExpressionFilterSpecificat
 
 // Hide POI
 
-function pruneHideFilter(filter: ExpressionFilterSpecification | void): ExpressionFilterSpecification | void {
-  if(filter === true) {
+function pruneHideFilter(
+  filter: ExpressionFilterSpecification | void,
+): ExpressionFilterSpecification | void {
+  if (filter === true) {
     return filter
   }
 
@@ -160,7 +162,9 @@ function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: bool
   poiLayers
     .filter(layerId => map.getLayer(layerId))
     .forEach(layerId => {
-      const styleFilter = pruneHideFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void)
+      const styleFilter = pruneHideFilter(
+        map.getFilter(layerId) as ExpressionFilterSpecification | void,
+      )
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`)
@@ -176,7 +180,9 @@ function unsetHideFilter(map: maplibregl.Map) {
   poiLayers
     .filter(layerId => map.getLayer(layerId))
     .forEach(layerId => {
-      const styleFilter = pruneHideFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void)
+      const styleFilter = pruneHideFilter(
+        map.getFilter(layerId) as ExpressionFilterSpecification | void,
+      )
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`)
@@ -210,13 +216,15 @@ function ammendPictoFilter(
   // @ts-ignore
   if (close && close[3] && (close[3] as ExpressionFilterSpecification)[2]) {
     // @ts-ignore
-    (close[3] as ExpressionFilterSpecification)[2] = styleExpression
+    ;(close[3] as ExpressionFilterSpecification)[2] = styleExpression
   }
 
   return filter
 }
 
-function resetPictoLayout(expr: ExpressionFilterSpecification): ExpressionFilterSpecification | void {
+function resetPictoLayout(
+  expr: ExpressionFilterSpecification,
+): ExpressionFilterSpecification | void {
   if (expr === true || !expr || !expr[4]) {
     return
   }
@@ -260,7 +268,13 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
         map.setLayoutProperty(layerId, 'icon-image', layout)
       }
 
-      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void, styleExpression) || null)
+      map.setFilter(
+        layerId,
+        ammendPictoFilter(
+          map.getFilter(layerId) as ExpressionFilterSpecification | void,
+          styleExpression,
+        ) || null,
+      )
     })
 }
 
@@ -276,6 +290,12 @@ function unsetPictoLayout(map: maplibregl.Map) {
         map.setLayoutProperty(layerId, 'icon-image', layout)
       }
 
-      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void, defaultStyle) || null)
+      map.setFilter(
+        layerId,
+        ammendPictoFilter(
+          map.getFilter(layerId) as ExpressionFilterSpecification | void,
+          defaultStyle,
+        ) || null,
+      )
     })
 }
