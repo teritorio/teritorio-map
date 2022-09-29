@@ -1,6 +1,6 @@
 # Teritorio Map
 
-Collection of helper functions to add some features to Mapbox GL JS related to Teritorio Map Style.
+Collection of helper functions to add some features to MapLibre GL JD (Mapbox GL JS) related to Teritorio Map Style.
 
 ## Display
 
