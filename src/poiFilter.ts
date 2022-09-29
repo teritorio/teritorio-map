@@ -1,4 +1,4 @@
-import { FilterSpecification } from 'maplibre-gl';
+import { ExpressionFilterSpecification } from 'maplibre-gl';
 
 import { Control } from './control';
 
@@ -86,7 +86,7 @@ const poiLayers = [
   'poi-level-3',
 ];
 
-const filterId: FilterSpecification = ['let', '_bloc_name', 'poiFilter'];
+const filterId: ExpressionFilterSpecification = ['let', '_bloc_name', 'poiFilter'];
 
 function formatExpressionLiterals(filters: PoisFilters, filterLength: number): string[] {
   return filters
@@ -94,12 +94,12 @@ function formatExpressionLiterals(filters: PoisFilters, filterLength: number): s
     .map(f => (filterLength === 1 ? f[0] : f.join('|')));
 }
 
-function createFilterExpression(filter: PoisFilters): FilterSpecification {
+function createFilterExpression(filter: PoisFilters): ExpressionFilterSpecification {
   const f1 = formatExpressionLiterals(filter, 1);
   const f2 = formatExpressionLiterals(filter, 2);
   const f3 = formatExpressionLiterals(filter, 3);
 
-  const expression: FilterSpecification = ['any'];
+  const expression: ExpressionFilterSpecification = ['any'];
 
   if (f1.length > 0) {
     expression.push(['in', ['get', 'superclass'], ['literal', f1]]);
@@ -125,7 +125,11 @@ function createFilterExpression(filter: PoisFilters): FilterSpecification {
 
 // Hide POI
 
-function pruneHideFilter(filter: FilterSpecification | void): FilterSpecification | void {
+function pruneHideFilter(filter: ExpressionFilterSpecification | void): ExpressionFilterSpecification | void {
+  if(filter === true) {
+    return filter;
+  }
+
   if (!filter || filter[0] !== 'all') {
     return;
   }
@@ -134,16 +138,16 @@ function pruneHideFilter(filter: FilterSpecification | void): FilterSpecificatio
     close =>
       !(
         Array.isArray(close) &&
-        close.length === filterId.length + 1 &&
-        close[0] === filterId[0] &&
-        close[1] === filterId[1] &&
-        close[2] === filterId[2]
+        close.length === (filterId as Array<any>).length + 1 &&
+        close[0] === (filterId as Array<any>)[0] &&
+        close[1] === (filterId as Array<any>)[1] &&
+        close[2] === (filterId as Array<any>)[2]
       ),
-  ) as FilterSpecification;
+  ) as ExpressionFilterSpecification;
 }
 
 function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
-  let expression: FilterSpecification;
+  let expression: ExpressionFilterSpecification;
 
   if (include) {
     // @ts-ignore
@@ -156,7 +160,7 @@ function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: bool
   poiLayers
     .filter(layerId => map.getLayer(layerId))
     .forEach(layerId => {
-      const styleFilter = pruneHideFilter(map.getFilter(layerId));
+      const styleFilter = pruneHideFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void);
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`);
@@ -172,7 +176,7 @@ function unsetHideFilter(map: maplibregl.Map) {
   poiLayers
     .filter(layerId => map.getLayer(layerId))
     .forEach(layerId => {
-      const styleFilter = pruneHideFilter(map.getFilter(layerId));
+      const styleFilter = pruneHideFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void);
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`);
@@ -184,35 +188,36 @@ function unsetHideFilter(map: maplibregl.Map) {
 
 // Switch to picto
 
-const filterPictoId: FilterSpecification = ['let', '_bloc_name', 'styleFilter'];
-const defaultStyle: FilterSpecification = ['get', 'style'];
+const defaultStyle: ExpressionFilterSpecification = ['get', 'style'];
 
 function ammendPictoFilter(
-  filter: FilterSpecification | void,
-  styleExpression: FilterSpecification,
-): FilterSpecification | void {
-  if (!filter || filter[0] !== 'all') {
+  filter: ExpressionFilterSpecification | void,
+  styleExpression: ExpressionFilterSpecification,
+): ExpressionFilterSpecification | void {
+  if (filter === true || !filter || filter[0] !== 'all') {
     return;
   }
 
   const close = filter.find(
     close =>
       Array.isArray(close) &&
-      close.length === filterPictoId.length + 1 &&
-      close[0] === filterPictoId[0] &&
-      close[1] === filterPictoId[1] &&
-      close[2] === filterPictoId[2],
-  ) as FilterSpecification;
+      close.length === (filterId as Array<any>).length + 1 &&
+      close[0] === (filterId as Array<any>)[0] &&
+      close[1] === (filterId as Array<any>)[1] &&
+      close[2] === (filterId as Array<any>)[2],
+  ) as Exclude<ExpressionFilterSpecification, boolean>;
 
-  if (close && close[3] && (close[3] as FilterSpecification)[2]) {
-    (close[3] as FilterSpecification)[2] = styleExpression;
+  // @ts-ignore
+  if (close && close[3] && (close[3] as ExpressionFilterSpecification)[2]) {
+    // @ts-ignore
+    (close[3] as ExpressionFilterSpecification)[2] = styleExpression;
   }
 
   return filter;
 }
 
-function resetPictoLayout(expr: FilterSpecification): FilterSpecification | void {
-  if (!expr || !expr[4]) {
+function resetPictoLayout(expr: ExpressionFilterSpecification): ExpressionFilterSpecification | void {
+  if (expr === true || !expr || !expr[4]) {
     return;
   }
 
@@ -231,7 +236,7 @@ function resetPictoLayout(expr: FilterSpecification): FilterSpecification | void
 }
 
 function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
-  let expression: FilterSpecification;
+  let expression: ExpressionFilterSpecification;
 
   if (include) {
     // @ts-ignore
@@ -245,7 +250,8 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
     .filter(layerId => map.getLayer(layerId))
     .forEach(layerId => {
       const layout = map.getLayoutProperty(layerId, 'icon-image');
-      const styleExpression = ['case', expression, '•', defaultStyle];
+      // @ts-ignore
+      const styleExpression: ExpressionFilterSpecification = ['case', expression, '•', defaultStyle];
 
       if (!layout) {
         console.warn(`Cannot amend filter of layer "${layerId}"`);
@@ -254,7 +260,7 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
         map.setLayoutProperty(layerId, 'icon-image', layout);
       }
 
-      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), styleExpression) || null);
+      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void, styleExpression) || null);
     });
 }
 
@@ -270,6 +276,6 @@ function unsetPictoLayout(map: maplibregl.Map) {
         map.setLayoutProperty(layerId, 'icon-image', layout);
       }
 
-      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId), defaultStyle) || null);
+      map.setFilter(layerId, ammendPictoFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void, defaultStyle) || null);
     });
 }
