@@ -31,16 +31,28 @@ export class Building3d extends Control {
           this._map.easeTo({ pitch, duration: 500 })
         }
 
-        this._map.setLayoutProperty('building-3d', 'visibility', 'visible')
-        this._map.setLayoutProperty('building', 'visibility', 'none')
-        this._map.setLayoutProperty('building-top', 'visibility', 'none')
+        if (this._map.getLayer('building-3d')) {
+          this._map.setLayoutProperty('building-3d', 'visibility', 'visible')
+        }
+        if (this._map.getLayer('building')) {
+          this._map.setLayoutProperty('building', 'visibility', 'none')
+        }
+        if (this._map.getLayer('building-top')) {
+          this._map.setLayoutProperty('building-top', 'visibility', 'none')
+        }
       } else {
         // Make it flat
         this._map.easeTo({ pitch: 0, duration: 500 })
 
-        this._map.setLayoutProperty('building', 'visibility', 'visible')
-        this._map.setLayoutProperty('building-top', 'visibility', 'visible')
-        this._map.setLayoutProperty('building-3d', 'visibility', 'none')
+        if (this._map.getLayer('building')) {
+          this._map.setLayoutProperty('building', 'visibility', 'visible')
+        }
+        if (this._map.getLayer('building-top')) {
+          this._map.setLayoutProperty('building-top', 'visibility', 'visible')
+        }
+        if (this._map.getLayer('building-3d')) {
+          this._map.setLayoutProperty('building-3d', 'visibility', 'none')
+        }
       }
     }
   }
