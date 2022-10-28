@@ -194,6 +194,7 @@ function unsetHideFilter(map: maplibregl.Map) {
 
 // Switch to picto
 
+const filterPictoId: ExpressionFilterSpecification = ['let', '_bloc_name', 'styleFilter']
 const defaultStyle: ExpressionFilterSpecification = ['get', 'style']
 
 function ammendPictoFilter(
@@ -207,10 +208,10 @@ function ammendPictoFilter(
   const close = filter.find(
     close =>
       Array.isArray(close) &&
-      close.length === (filterId as Array<any>).length + 1 &&
-      close[0] === (filterId as Array<any>)[0] &&
-      close[1] === (filterId as Array<any>)[1] &&
-      close[2] === (filterId as Array<any>)[2],
+      close.length === (filterPictoId as Array<any>).length + 1 &&
+      close[0] === (filterPictoId as Array<any>)[0] &&
+      close[1] === (filterPictoId as Array<any>)[1] &&
+      close[2] === (filterPictoId as Array<any>)[2],
   ) as Exclude<ExpressionFilterSpecification, boolean>
 
   // @ts-ignore
