@@ -3,8 +3,9 @@ export class Control implements maplibregl.IControl {
   protected _container?: HTMLDivElement
   private _initialUpdateBind: () => void
 
-  constructor() {
+  constructor(container?: HTMLDivElement) {
     this._initialUpdateBind = this._initialUpdate.bind(this)
+    this._container = container
   }
 
   protected _initialUpdate() {
@@ -15,7 +16,9 @@ export class Control implements maplibregl.IControl {
   onAdd(map: maplibregl.Map) {
     this._map = map
     this._map.on('styledata', this._initialUpdateBind)
-    this._container = document.createElement('div')
+    if (!this._container) {
+      this._container = document.createElement('div')
+    }
     return this._container
   }
 

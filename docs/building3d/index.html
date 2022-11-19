@@ -15,6 +15,12 @@
   <body>
     <div class="map"></div>
 
+    <div>
+      <div id="control" class="maplibregl-ctrl maplibregl-ctrl-group">
+          eg. control
+      </div>
+    </div>
+
     <ul class="top-buttons">
       <li><button data-building3d="false">Flat</button></li>
       <li><button data-building3d="true">3D</button></li>
@@ -32,6 +38,7 @@
 
       const building3d = new teritorio.Building3d({
         building3d: true,
+        container: document.querySelector('#control'),
       });
       map.addControl(building3d);
 

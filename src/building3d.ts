@@ -1,6 +1,7 @@
 import { Control } from './control'
 
 interface Options {
+  container?: HTMLDivElement
   building3d?: boolean
   pitch?: number
 }
@@ -12,7 +13,7 @@ export class Building3d extends Control {
   private _options?: Options
 
   constructor(options?: Options) {
-    super()
+    super(options?.container)
     this._options = options
   }
 
