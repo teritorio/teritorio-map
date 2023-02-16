@@ -2,7 +2,6 @@
   "name": "@teritorio/map",
   "version": "0.12.4",
   "license": "MIT",
-  "main": "dist/index.js",
   "module": "dist/teritorio-map.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
