@@ -1,6 +1,6 @@
 {
   "name": "@teritorio/map",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "license": "MIT",
   "module": "dist/teritorio-map.esm.js",
   "typings": "dist/index.d.ts",
