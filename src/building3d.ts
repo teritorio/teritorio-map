@@ -17,14 +17,14 @@ export class Building3d extends Control {
     this._options = options
   }
 
-  protected _initialUpdate() {
+  protected _initialUpdate(): void {
     super._initialUpdate()
     if (this._options?.building3d) {
       this.set3d(this._options.building3d, this._options?.pitch)
     }
   }
 
-  set3d(building3d: boolean, pitch?: number) {
+  set3d(building3d: boolean, pitch?: number): void {
     if (this._map) {
       if (building3d) {
         // Make it 3D
@@ -43,7 +43,8 @@ export class Building3d extends Control {
         }
 
         this._map.setTerrain({ source: 'alti', exaggeration: 1.5 })
-      } else {
+      }
+      else {
         // Make it flat
         this._map.easeTo({ pitch: 0, duration: 500 })
 
@@ -57,8 +58,7 @@ export class Building3d extends Control {
           this._map.setLayoutProperty('building-3d', 'visibility', 'none')
         }
 
-        // @ts-ignore
-        this._map.setTerrain()
+        this._map.setTerrain(null)
       }
     }
   }

@@ -1,7 +1,7 @@
 import { Border } from '../src'
 
-describe('Border', () => {
-  test('is exported', () => {
+describe('border', () => {
+  it('is exported', () => {
     expect(Border).toBeTruthy()
   })
 })

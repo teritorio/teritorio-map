@@ -1,4 +1,4 @@
-import { ExpressionFilterSpecification } from 'maplibre-gl'
+import type { ExpressionFilterSpecification } from 'maplibre-gl'
 
 import { Control } from './control'
 
@@ -19,32 +19,32 @@ export class PoiFilter extends Control {
     this._options = options
   }
 
-  protected _initialUpdate() {
+  protected _initialUpdate(): void {
     super._initialUpdate()
     if (this._map && this._options?.filter) {
       applyFilter(this._map, this._options?.filter, this._options?.include, this._options?.picto)
     }
   }
 
-  setExcludeFilter(filter: PoisFilters, picto: boolean = true) {
+  setExcludeFilter(filter: PoisFilters, picto: boolean = true): void {
     if (this._map) {
       applyFilter(this._map, filter, false, picto)
     }
   }
 
-  setIncludeFilter(filter: PoisFilters, picto: boolean = true) {
+  setIncludeFilter(filter: PoisFilters, picto: boolean = true): void {
     if (this._map) {
       applyFilter(this._map, filter, true, picto)
     }
   }
 
-  remove(picto: boolean = true) {
+  remove(picto: boolean = true): void {
     if (this._map) {
       applyFilter(this._map, [], true, picto)
     }
   }
 
-  reset() {
+  reset(): void {
     if (this._map) {
       unsetFilter(this._map)
     }
@@ -58,7 +58,7 @@ function applyFilter(
   filter: PoisFilters,
   include: boolean = true,
   picto: boolean = true,
-) {
+): void {
   if (!filter || !Array.isArray(filter)) {
     return
   }
@@ -66,13 +66,14 @@ function applyFilter(
   if (picto) {
     unsetHideFilter(map)
     applyPictoLayout(map, filter, include)
-  } else {
+  }
+  else {
     unsetPictoLayout(map)
     applyHideFilter(map, filter, include)
   }
 }
 
-function unsetFilter(map: maplibregl.Map) {
+function unsetFilter(map: maplibregl.Map): void {
   unsetHideFilter(map)
   unsetPictoLayout(map)
 }
@@ -139,54 +140,55 @@ function pruneHideFilter(
   return filter.filter(
     close =>
       !(
-        Array.isArray(close) &&
-        close.length === (filterId as Array<any>).length + 1 &&
-        close[0] === (filterId as Array<any>)[0] &&
-        close[1] === (filterId as Array<any>)[1] &&
-        close[2] === (filterId as Array<any>)[2]
+        Array.isArray(close)
+        && close.length === (filterId as Array<any>).length + 1
+        && close[0] === (filterId as Array<any>)[0]
+        && close[1] === (filterId as Array<any>)[1]
+        && close[2] === (filterId as Array<any>)[2]
       ),
   ) as ExpressionFilterSpecification
 }
 
-function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
+function applyHideFilter(map: maplibregl.Map, filter: PoisFilters, include: boolean = true): void {
   let expression: ExpressionFilterSpecification
+  if (!Array.isArray(filterId))
+    return
 
   if (include) {
-    // @ts-ignore
-    expression = [...filterId, createFilterExpression(filter)]
-  } else {
-    // @ts-ignore
-    expression = [...filterId, ['!', createFilterExpression(filter)]]
+    expression = [...filterId, createFilterExpression(filter)] as ExpressionFilterSpecification
+  }
+  else {
+    expression = [...filterId, ['!', createFilterExpression(filter)]] as ExpressionFilterSpecification
   }
 
   poiLayers
     .filter(layerId => map.getLayer(layerId))
-    .forEach(layerId => {
-      const styleFilter = pruneHideFilter(
-        map.getFilter(layerId) as ExpressionFilterSpecification | void,
-      )
+    .forEach((layerId) => {
+      let styleFilter = pruneHideFilter(map.getFilter(layerId) as ExpressionFilterSpecification | void)
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`)
-      } else {
-        // @ts-ignore
-        styleFilter.push(expression)
+      }
+      else {
+        if (Array.isArray(styleFilter))
+          styleFilter = [...styleFilter, expression] as ExpressionFilterSpecification
         map.setFilter(layerId, styleFilter)
       }
     })
 }
 
-function unsetHideFilter(map: maplibregl.Map) {
+function unsetHideFilter(map: maplibregl.Map): void {
   poiLayers
     .filter(layerId => map.getLayer(layerId))
-    .forEach(layerId => {
+    .forEach((layerId) => {
       const styleFilter = pruneHideFilter(
         map.getFilter(layerId) as ExpressionFilterSpecification | void,
       )
 
       if (!styleFilter) {
         console.warn(`Cannot amend filter of layer "${layerId}"`)
-      } else {
+      }
+      else {
         map.setFilter(layerId, styleFilter)
       }
     })
@@ -207,17 +209,15 @@ function ammendPictoFilter(
 
   const close = filter.find(
     close =>
-      Array.isArray(close) &&
-      close.length === (filterPictoId as Array<any>).length + 1 &&
-      close[0] === (filterPictoId as Array<any>)[0] &&
-      close[1] === (filterPictoId as Array<any>)[1] &&
-      close[2] === (filterPictoId as Array<any>)[2],
+      Array.isArray(close)
+      && close.length === (filterPictoId as Array<any>).length + 1
+      && close[0] === (filterPictoId as Array<any>)[0]
+      && close[1] === (filterPictoId as Array<any>)[1]
+      && close[2] === (filterPictoId as Array<any>)[2],
   ) as Exclude<ExpressionFilterSpecification, boolean>
 
-  // @ts-ignore
-  if (close && close[3] && (close[3] as ExpressionFilterSpecification)[2]) {
-    // @ts-ignore
-    ;(close[3] as ExpressionFilterSpecification)[2] = styleExpression
+  if (close && Array.isArray(close[3]) && close[3][2]) {
+    close[3][2] = styleExpression
   }
 
   return filter
@@ -231,10 +231,10 @@ function resetPictoLayout(
   }
 
   if (
-    !Array.isArray(expr[4]) ||
-    expr[4][0] !== 'case' ||
-    !Array.isArray(expr[4][1]) ||
-    expr[4][1][0] !== 'let'
+    !Array.isArray(expr[4])
+    || expr[4][0] !== 'case'
+    || !Array.isArray(expr[4][1])
+    || expr[4][1][0] !== 'let'
   ) {
     return
   }
@@ -244,27 +244,29 @@ function resetPictoLayout(
   return expr
 }
 
-function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boolean = true) {
+function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boolean = true): void {
   let expression: ExpressionFilterSpecification
 
+  if (!Array.isArray(filterId))
+    return
+
   if (include) {
-    // @ts-ignore
-    expression = [...filterId, ['!', createFilterExpression(filter)]]
-  } else {
-    // @ts-ignore
-    expression = [...filterId, createFilterExpression(filter)]
+    expression = [...filterId, ['!', createFilterExpression(filter)]] as ExpressionFilterSpecification
+  }
+  else {
+    expression = [...filterId, createFilterExpression(filter)] as ExpressionFilterSpecification
   }
 
   poiLayers
     .filter(layerId => map.getLayer(layerId))
-    .forEach(layerId => {
+    .forEach((layerId) => {
       const layout = map.getLayoutProperty(layerId, 'icon-image')
-      // @ts-ignore
-      const styleExpression: ExpressionFilterSpecification = ['case', expression, '•', defaultStyle]
+      const styleExpression: ExpressionFilterSpecification = ['array', ['case', expression, '•', defaultStyle]]
 
       if (!layout) {
         console.warn(`Cannot amend filter of layer "${layerId}"`)
-      } else {
+      }
+      else {
         layout[4] = styleExpression
         map.setLayoutProperty(layerId, 'icon-image', layout)
       }
@@ -279,15 +281,16 @@ function applyPictoLayout(map: maplibregl.Map, filter: PoisFilters, include: boo
     })
 }
 
-function unsetPictoLayout(map: maplibregl.Map) {
+function unsetPictoLayout(map: maplibregl.Map): void {
   poiLayers
     .filter(layerId => map.getLayer(layerId))
-    .forEach(layerId => {
+    .forEach((layerId) => {
       const layout = resetPictoLayout(map.getLayoutProperty(layerId, 'icon-image'))
 
       if (!layout) {
         console.warn(`Cannot amend layout of layer "${layerId}"`)
-      } else {
+      }
+      else {
         map.setLayoutProperty(layerId, 'icon-image', layout)
       }
 

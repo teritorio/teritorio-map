@@ -1,7 +1,7 @@
 import { PoiFilter } from '../src'
 
-describe('PoiFilter', () => {
-  test('is exported', () => {
+describe('poiFilter', () => {
+  it('is exported', () => {
     expect(PoiFilter).toBeTruthy()
   })
 })
