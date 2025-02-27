@@ -55,7 +55,7 @@ icon(/* ... */);
 
 ## Requirements
 
-Requires [maplibre-gl-js](https://maplibre.org/projects/#js) or older [mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js) >= v1.10.1 and < 2.0.0).
+Requires [maplibre-gl-js](https://maplibre.org/projects/#js) or older [mapbox-gl-js](https://github.com/mapbox/mapbox-gl-js) >= v1.10.1 and < 2.0.0.
 
 ## Contribution
 
