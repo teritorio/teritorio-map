@@ -46,17 +46,17 @@ export class Border extends Control {
     this._options = options
   }
 
-  protected init() {
+  protected init(): void {
     if (this._map) {
       this._map.addLayer(
         {
-          filter: ['all', ['!=', 'maritime', 1], ['==', 'disputed', 1]],
-          id: 'boundary-land-disputed',
-          layout: {
+          'filter': ['all', ['!=', 'maritime', 1], ['==', 'disputed', 1]],
+          'id': 'boundary-land-disputed',
+          'layout': {
             'line-cap': 'round',
             'line-join': 'round',
           },
-          paint: {
+          'paint': {
             'line-color': 'hsl(248, 7%, 70%)',
             'line-dasharray': [1, 3],
             'line-width': {
@@ -69,27 +69,28 @@ export class Border extends Control {
               ],
             },
           },
-          source: 'openmaptiles',
+          'source': 'openmaptiles',
           'source-layer': 'boundary',
-          type: 'line',
+          'type': 'line',
         },
         'boundary-land-level-2',
       )
     }
   }
 
-  protected _initialUpdate() {
+  protected _initialUpdate(): void {
     super._initialUpdate()
     this.init()
 
     if (this._options?.country) {
       this.setBorder(this._options.country)
-    } else {
+    }
+    else {
       this.resetBorder()
     }
   }
 
-  resetBorder() {
+  resetBorder(): void {
     if (this._map) {
       this._map.setFilter('boundary-land-level-2', [
         'all',
@@ -100,15 +101,12 @@ export class Border extends Control {
     }
   }
 
-  setBorder(country: Country) {
+  setBorder(country: Country): void {
     if (this._map) {
       this._map.setFilter('boundary-land-level-2', [
-        // @ts-ignore
         'all',
         ['==', ['to-number', ['get', 'admin_level']], 2],
-        // @ts-ignore
         ['!=', ['to-number', ['get', 'maritime']], 1],
-        // @ts-ignore
         [
           'any',
           [

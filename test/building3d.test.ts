@@ -1,7 +1,7 @@
 import { Building3d } from '../src'
 
-describe('Building3d', () => {
-  test('is exported', () => {
+describe('building3d', () => {
+  it('is exported', () => {
     expect(Building3d).toBeTruthy()
   })
 })

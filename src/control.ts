@@ -8,12 +8,12 @@ export class Control implements maplibregl.IControl {
     this._container = container
   }
 
-  protected _initialUpdate() {
+  protected _initialUpdate(): void {
     // We only update the style once
     this._map?.off('styledata', this._initialUpdateBind)
   }
 
-  onAdd(map: maplibregl.Map) {
+  onAdd(map: maplibregl.Map): HTMLDivElement {
     this._map = map
     this._map.on('styledata', this._initialUpdateBind)
     if (!this._container) {
@@ -22,7 +22,7 @@ export class Control implements maplibregl.IControl {
     return this._container
   }
 
-  onRemove() {
+  onRemove(): void {
     this._map?.off('styledata', this._initialUpdateBind)
     this._map = undefined
   }

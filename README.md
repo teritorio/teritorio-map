@@ -38,9 +38,9 @@ To use in your HTML files:
 To import the library in your bundled project:
 
 ```js
-import { icon } from '@teritorio/map';
+import { icon } from '@teritorio/map'
 
-icon(/* ... */);
+icon(/* ... */)
 ```
 
 ### ES Module

@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Begin CI...
         uses: actions/checkout@v4
-      
+
       - run: corepack enable
 
       - name: Set Yarn to Berry (v2+)
