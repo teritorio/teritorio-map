@@ -25,10 +25,14 @@
     "start": "tsdx watch --format cjs,esm,umd --name teritorio",
     "build": "tsdx build --format cjs,esm,umd --name teritorio",
     "test": "tsdx test",
-    "lint": "tsdx lint",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "prepare": "tsdx build --format cjs,esm,umd --name teritorio"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.3.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-format": "^1.0.1",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.2",
     "maplibre-gl": "~5.1.0",
