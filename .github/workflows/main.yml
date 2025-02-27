@@ -17,14 +17,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18.x
-
-      - name: Use cached node_modules
-        uses: actions/cache@v1
-        with:
-          path: node_modules
-          key: nodeModules-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            nodeModules-
+          cache: yarn
 
       - name: Install dependencies
         run: yarn install --immutable
