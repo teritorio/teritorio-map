@@ -19,5 +19,11 @@
     "sourceMap": true,
     "esModuleInterop": true
   },
-  "include": ["src", "types"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

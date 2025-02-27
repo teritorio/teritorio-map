@@ -28,20 +28,30 @@
     "test": "tsdx test",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "tsdx build --format cjs,esm,umd --name teritorio"
+    "prepare": "simple-git-hooks && tsdx build --format cjs,esm,umd --name teritorio"
   },
   "peerDependencies": {
     "mapbox-gl": "^1.10.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.3.0",
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
     "eslint": "^9.21.0",
     "eslint-plugin-format": "^1.0.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
+    "lint-staged": "^15.4.3",
     "maplibre-gl": "~5.1.0",
+    "simple-git-hooks": "^2.11.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
     "typescript": "^5.0.0"
+  },
+  "simple-git-hooks": {
+    "commit-msg": "yarn dlx commitlint --edit $1",
+    "pre-commit": "yarn dlx lint-staged",
+    "preserveUnused": true
+  },
+  "lint-staged": {
+    "*": "yarn lint:fix"
   }
 }
