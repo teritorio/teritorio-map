@@ -40,7 +40,7 @@
     "eslint": "^9.21.0",
     "eslint-plugin-format": "^1.0.1",
     "lint-staged": "^15.4.3",
-    "maplibre-gl": "~5.1.0",
+    "maplibre-gl": "^5.2.0",
     "simple-git-hooks": "^2.11.1",
     "tsdx": "^0.14.1",
     "tslib": "^2.1.0",
