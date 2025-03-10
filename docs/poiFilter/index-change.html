@@ -1,52 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Filter POI</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Filter POI</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <link href="../styles.css" rel="stylesheet" />
-  </head>
+  <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <body>
-    <div class="map"></div>
+  <link href="../styles.css" rel="stylesheet" />
+</head>
 
-    <ul class="top-buttons">
-      <li><button data-filter="reset">Reset</button></li>
-      <li><button data-filter="picto-none">Picto</button></li>
-      <li><button data-filter="none">None</button></li>
-      <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
-      <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
-      <li>
-        <button data-filter="picto-include-park-restaurant">
-          Only Park and Restaurant + picto
-        </button>
-      </li>
-      <li><button data-filter="include-catering">Only Catering</button></li>
-      <li><button data-filter="exclude-catering">No Catering</button></li>
-      <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
-    </ul>
+<body>
+  <div class="map"></div>
 
-    <script type="text/javascript">
-      const map = new maplibregl.Map({
-        container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
-        center: [-1.559646, 43.482489],
-        zoom: 16.54,
-        maxZoom: 20,
-        hash: true,
-      });
+  <ul class="top-buttons">
+    <li><button data-filter="reset">Reset</button></li>
+    <li><button data-filter="picto-none">Picto</button></li>
+    <li><button data-filter="none">None</button></li>
+    <li><button data-filter="picto-include-catering">Only Catering + picto</button></li>
+    <li><button data-filter="picto-exclude-catering">No Catering + picto</button></li>
+    <li>
+      <button data-filter="picto-include-park-restaurant">
+        Only Park and Restaurant + picto
+      </button>
+    </li>
+    <li><button data-filter="include-catering">Only Catering</button></li>
+    <li><button data-filter="exclude-catering">No Catering</button></li>
+    <li><button data-filter="include-park-restaurant">Only Park and Restaurant</button></li>
+  </ul>
 
-      const poiFilter = new teritorio.PoiFilter();
-      map.addControl(poiFilter);
+  <script type="text/javascript">
+    const map = new maplibregl.Map({
+      container: document.querySelector('.map'),
+      style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
+      center: [-1.559646, 43.482489],
+      zoom: 16.54,
+      maxZoom: 20,
+      hash: true,
+    });
 
-      document.querySelector('.top-buttons').addEventListener('click', function(event) {
-        event.stopPropagation();
+    const poiFilter = new teritorio.PoiFilter();
+    map.addControl(poiFilter);
 
+    const buttons = document.querySelectorAll('.top-buttons li button')
+
+    buttons.forEach(button => {
+      button.addEventListener('click', (event) => {
         const picto = event.target.dataset.filter.startsWith('picto');
 
         if (event.target.dataset.filter.endsWith('include-catering')) {
@@ -66,7 +68,9 @@
         } else if (event.target.dataset.filter == 'reset') {
           poiFilter.reset();
         }
-      });
-    </script>
-  </body>
+      })
+    })
+  </script>
+</body>
+
 </html>
