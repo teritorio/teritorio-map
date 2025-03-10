@@ -176,7 +176,7 @@
           if (lastStyle != targetEnd) {
             lastStyle = targetEnd;
             map.setStyle(styles[lastStyle]);
-            map.once('style', (event) => {
+            map.once('styledata', (event) => {
               if (event.dataType == 'style') {
                 effect();
               }
@@ -185,10 +185,10 @@
             effect();
           }
         } else {
-          if (lastStyle != 'tourism') {
+          if (lastStyle !== 'tourism') {
             lastStyle = 'tourism';
             map.setStyle(styles[lastStyle]);
-            map.once('style', (event) => {
+            map.once('styledata', (event) => {
               if (event.dataType == 'style') {
                 effect();
               }
