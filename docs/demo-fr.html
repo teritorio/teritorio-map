@@ -96,7 +96,7 @@
   <div class="map"></div>
 
   <ul class="top-buttons">
-    <li><button class="color-style" data-filter="reset-tourisme">Style Tourisme</button></li>
+    <li><button class="color-style" data-filter="reset-tourism">Style Tourisme</button></li>
     <li><button class="color-style" data-filter="reset-city">Style Ville</button></li>
     <li><button class="color-style" data-filter="reset-cycle">Style Vélo</button></li>
     <li><button class="color-style" data-filter="reset-topo">Style Topo</button></li>
@@ -114,13 +114,13 @@
 
   <script type="text/javascript">
     const styles = {
-      'tourisme': 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
+      'tourism': 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
       'city': 'https://vecto.teritorio.xyz/styles/teritorio-city-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
       'cycle': 'https://vecto.teritorio.xyz/styles/teritorio-bicycle-latest/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
       'topo': 'https://vecto.teritorio.xyz/styles/teritorio-topo/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
       'satellite': 'https://vecto.teritorio.xyz/styles/satellite-hybrid/style.json?key=teritorio-demo-1-eTuhasohVahquais0giuth7i',
     };
-    let lastStyle = 'tourisme';
+    let lastStyle = 'tourism';
     const map = new maplibregl.Map({
       container: document.querySelector('.map'),
       style: styles[lastStyle],
@@ -185,8 +185,8 @@
             effect();
           }
         } else {
-          if (lastStyle != 'tourisme') {
-            lastStyle = 'tourisme';
+          if (lastStyle != 'tourism') {
+            lastStyle = 'tourism';
             map.setStyle(styles[lastStyle]);
             map.once('style', (event) => {
               if (event.dataType == 'style') {
