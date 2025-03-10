@@ -9,7 +9,8 @@
   <link href='https://unpkg.com/maplibre-gl@5.1.0/dist/maplibre-gl.css' rel='stylesheet' />
 
   <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
-  <script src="https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.umd.production.min.js"></script>
+  <script
+    src="https://unpkg.com/@teritorio/openmaptiles-gl-language/dist/openmaptiles_gl_language.umd.production.min.js"></script>
 
   <style>
     * {
@@ -143,58 +144,61 @@
     });
     map.addControl(language);
 
-    document.querySelector('.top-buttons').addEventListener('click', function (event) {
-      event.stopPropagation();
-      const targetStart = event.target.dataset.filter.split('-')[0];
-      const targetEnd = event.target.dataset.filter.split('-').pop();
+    const buttons = document.querySelectorAll('.top-buttons li button')
 
-      const effect = () => {
-        if (event.target.dataset.filter.endsWith('include-catering')) {
-          poiFilter.setIncludeFilter([['catering']]);
-        } else if (targetEnd === 'none') {
-          poiFilter.remove();
-        } else if (targetStart === 'reset') {
-          poiFilter.reset();
+    buttons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        const targetStart = event.target.dataset.filter.split('-')[0];
+        const targetEnd = event.target.dataset.filter.split('-').pop();
+
+        const effect = () => {
+          if (event.target.dataset.filter.endsWith('include-catering')) {
+            poiFilter.setIncludeFilter([['catering']]);
+          } else if (targetEnd === 'none') {
+            poiFilter.remove();
+          } else if (targetStart === 'reset') {
+            poiFilter.reset();
+          }
+
+          if (targetEnd === '3d') {
+            building3d.set3d(true, 60);
+          } else {
+            building3d.set3d(false, 0);
+          }
+
+          if (targetStart === 'lang') {
+            const lang = event.target.dataset.filter.substring(5, 7);
+            language.setLanguage(lang);
+          }
         }
 
-        if (targetEnd === '3d') {
-          building3d.set3d(true, 60);
+        if (Object.keys(styles).includes(targetEnd)) {
+          if (lastStyle != targetEnd) {
+            lastStyle = targetEnd;
+            map.setStyle(styles[lastStyle]);
+            map.once('style', (event) => {
+              if (event.dataType == 'style') {
+                effect();
+              }
+            });
+          } else {
+            effect();
+          }
         } else {
-          building3d.set3d(false, 0);
+          if (lastStyle != 'tourisme') {
+            lastStyle = 'tourisme';
+            map.setStyle(styles[lastStyle]);
+            map.once('style', (event) => {
+              if (event.dataType == 'style') {
+                effect();
+              }
+            });
+          } else {
+            effect();
+          }
         }
-
-        if (targetStart === 'lang') {
-          const lang = event.target.dataset.filter.substring(5, 7);
-          language.setLanguage(lang);
-        }
-      }
-
-      if (Object.keys(styles).includes(targetEnd)) {
-        if (lastStyle != targetEnd) {
-          lastStyle = targetEnd;
-          map.setStyle(styles[lastStyle]);
-          map.once('style', (event) => {
-            if (event.dataType == 'style') {
-              effect();
-            }
-          });
-        } else {
-          effect();
-        }
-      } else {
-        if (lastStyle != 'tourisme') {
-          lastStyle = 'tourisme';
-          map.setStyle(styles[lastStyle]);
-          map.once('style', (event) => {
-            if (event.dataType == 'style') {
-              effect();
-            }
-          });
-        } else {
-          effect();
-        }
-      }
-    });
+      })
+    })
   </script>
 </body>
 
