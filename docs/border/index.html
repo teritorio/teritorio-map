@@ -1,89 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Change a map's boundaries</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Change a map's boundaries</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <link href="../styles.css" rel="stylesheet" />
-  </head>
+  <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <body>
-    <div class="map"></div>
+  <link href="../styles.css" rel="stylesheet" />
+</head>
 
-    <ul class="top-buttons">
-      <li><button>Default</button></li>
-      <li><button data-border="ma">Morocco</button></li>
-      <li><button data-border="eh">Western Sahara</button></li>
-      <li><button data-border="rs">Serbia</button></li>
-      <li><button data-border="xk">Kosovo</button></li>
-      <li><button data-border="ru">Russia</button></li>
-      <li><button data-border="ua">Ukraine</button></li>
-      <li><button data-border="cn">China</button></li>
-      <li><button data-border="in">India</button></li>
-      <li><button data-border="pk">Pakistan</button></li>
-      <li><button data-border="bt">Bhutan</button></li>
-      <li><button data-border="sd">Sudan</button></li>
-      <li><button data-border="ss">South Sudan</button></li>
-    </ul>
+<body>
+  <div class="map"></div>
 
-    <div class="explanation">
-      <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
-      <p>Boundaries exclusively from OpenStreetMap.</p>
-      <p>Last data update 2019-08-23.</p>
-      <p>
-        Build with
-        <a
-          href="https://github.com/frodrigo/osmborder/tree/disputed_claim"
-          target="_blank"
-          rel="noopener noreferrer"
-          >modifier osmborder</a
-        >
-        and modified OpenMapTiles.
-      </p>
-      <p>
-        Partially based on <b>rejected</b> proposed features
-        <a
-          href="https://wiki.openstreetmap.org/wiki/Proposed_features/Mapping_disputed_boundaries"
-          target="_blank"
-          rel="noopener noreferrer"
-          >Mapping disputed boundaries</a
-        >.
-      </p>
-      <p>
-        If the country is included on the way "disputed_by" tag the boundary is dashed. If the
-        country is included on the relation "claimed_by" tag the boundary is plain.
-      </p>
-    </div>
+  <ul class="top-buttons">
+    <li><button>Default</button></li>
+    <li><button data-border="ma">Morocco</button></li>
+    <li><button data-border="eh">Western Sahara</button></li>
+    <li><button data-border="rs">Serbia</button></li>
+    <li><button data-border="xk">Kosovo</button></li>
+    <li><button data-border="ru">Russia</button></li>
+    <li><button data-border="ua">Ukraine</button></li>
+    <li><button data-border="cn">China</button></li>
+    <li><button data-border="in">India</button></li>
+    <li><button data-border="pk">Pakistan</button></li>
+    <li><button data-border="bt">Bhutan</button></li>
+    <li><button data-border="sd">Sudan</button></li>
+    <li><button data-border="ss">South Sudan</button></li>
+  </ul>
 
-    <script type="text/javascript">
-      const map = new maplibregl.Map({
-        container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
-        center: [79.23, 32.73],
-        zoom: 4.1,
-        maxZoom: 6,
-        hash: true,
-      });
+  <div class="explanation">
+    <h2>Experiment on Disputed and Claimed OSM boundaries</h2>
+    <p>Boundaries exclusively from OpenStreetMap.</p>
+    <p>Last data update 2019-08-23.</p>
+    <p>
+      Build with
+      <a href="https://github.com/frodrigo/osmborder/tree/disputed_claim" target="_blank"
+        rel="noopener noreferrer">modifier osmborder</a>
+      and modified OpenMapTiles.
+    </p>
+    <p>
+      Partially based on <b>rejected</b> proposed features
+      <a href="https://wiki.openstreetmap.org/wiki/Proposed_features/Mapping_disputed_boundaries" target="_blank"
+        rel="noopener noreferrer">Mapping disputed boundaries</a>.
+    </p>
+    <p>
+      If the country is included on the way "disputed_by" tag the boundary is dashed. If the
+      country is included on the relation "claimed_by" tag the boundary is plain.
+    </p>
+  </div>
 
-      const border = new teritorio.Border({
-        country: 'cn',
-      });
-      map.addControl(border);
+  <script type="text/javascript">
+    const map = new maplibregl.Map({
+      container: document.querySelector('.map'),
+      style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
+      center: [79.23, 32.73],
+      zoom: 4.1,
+      maxZoom: 6,
+      hash: true,
+    });
 
-      document.querySelector('.top-buttons').addEventListener('click', function(event) {
-        event.stopPropagation();
+    const border = new teritorio.Border({
+      country: 'cn',
+    });
+    map.addControl(border);
 
+    const buttons = document.querySelectorAll('.top-buttons li button')
+
+    buttons.forEach(button => {
+      button.addEventListener('click', (event) => {
         if (event.target.dataset.border) {
           border.setBorder(event.target.dataset.border);
         } else {
           border.resetBorder();
         }
-      });
-    </script>
-  </body>
+      })
+    })
+  </script>
+</body>
+
 </html>

@@ -1,57 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>Switch buildings in 3D</title>
-    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-    <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
-    <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
+<head>
+  <meta charset="utf-8" />
+  <title>Switch buildings in 3D</title>
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <script src="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.js"></script>
+  <link href="https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css" rel="stylesheet" />
 
-    <link href="../styles.css" rel="stylesheet" />
-  </head>
+  <script src="https://unpkg.com/@teritorio/map/dist/teritorio.umd.production.min.js"></script>
 
-  <body>
-    <div class="map"></div>
+  <link href="../styles.css" rel="stylesheet" />
+</head>
 
-    <div>
-      <div id="control" class="maplibregl-ctrl maplibregl-ctrl-group">
-          eg. control
-      </div>
+<body>
+  <div class="map"></div>
+
+  <div>
+    <div id="control" class="maplibregl-ctrl maplibregl-ctrl-group">
+      eg. control
     </div>
+  </div>
 
-    <ul class="top-buttons">
-      <li><button data-building3d="false">Flat</button></li>
-      <li><button data-building3d="true">3D</button></li>
-    </ul>
+  <ul class="top-buttons">
+    <li><button data-building3d="false">Flat</button></li>
+    <li><button data-building3d="true">3D</button></li>
+  </ul>
 
-    <script type="text/javascript">
-      const map = new maplibregl.Map({
-        container: document.querySelector('.map'),
-        style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
-        center: [-1.559646, 43.482489],
-        zoom: 16.54,
-        maxZoom: 20,
-        hash: true,
-      });
+  <script type="text/javascript">
+    const map = new maplibregl.Map({
+      container: document.querySelector('.map'),
+      style: 'https://vecto.teritorio.xyz/styles/teritorio-tourism-latest/style.json',
+      center: [-1.559646, 43.482489],
+      zoom: 16.54,
+      maxZoom: 20,
+      hash: true,
+    });
 
-      const building3d = new teritorio.Building3d({
-        building3d: true,
-        container: document.querySelector('#control'),
-      });
-      map.addControl(building3d);
+    const building3d = new teritorio.Building3d({
+      building3d: true,
+      container: document.querySelector('#control'),
+    });
+    map.addControl(building3d);
 
-      document.querySelector('.top-buttons').addEventListener('click', function(event) {
-        event.stopPropagation();
+    const buttons = document.querySelectorAll('.top-buttons li button')
 
+    buttons.forEach(button => {
+      button.addEventListener('click', (event) => {
         if (event.target.dataset.building3d) {
           const is3d = event.target.dataset.building3d === 'true';
           const pitch = is3d ? 60 : 0;
 
           building3d.set3d(is3d, pitch);
         }
-      });
-    </script>
-  </body>
+      })
+    })
+  </script>
+</body>
+
 </html>
